@@ -16,7 +16,7 @@ import {
     IconButton,
 } from "@mui/material";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import Background from "../../image/back.jpg";
+import Background from '../../image/diamond10.jpg'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Button as AntButton, Input, Space } from 'antd';
 import { UserOutlined } from '@ant-design/icons';

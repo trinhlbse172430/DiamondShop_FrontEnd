@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import '../Header/styles.css';
+import '../Footer/Footer.css'
 import { MenuOutlined, ShoppingCartOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
 import SlideBarMenu from "../SlideBarMenu/SlideBarMenu";
 
