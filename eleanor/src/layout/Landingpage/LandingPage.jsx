@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
+import React, { useRef } from 'react';
+
 import './LandingPage.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header'
+import Footer from '../../components/Footer/Footer'
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Card } from 'antd'
-import '../../components/Header/styles.css';
+import '../../components/Header/style.css'
 
 
 const { Meta } = Card;
