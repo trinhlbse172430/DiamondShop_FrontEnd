@@ -1,7 +1,7 @@
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./layout/LandingPage/LandingPage";
+import LandingPage from "./layout/Landingpage/LandingPage";
 import Login from "./layout/Auth/Login";
 import SignUp from "./layout/Auth/SignUp";
 import Cart from "./layout/Cart/Cart";
