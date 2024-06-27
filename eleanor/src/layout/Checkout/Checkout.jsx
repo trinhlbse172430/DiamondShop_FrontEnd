@@ -8,7 +8,7 @@ import {
     Button,
     IconButton,
 } from "@mui/material";
-import "../../components/Header/styles.css";
+import '../../components/Header/style.css';
 import axios from "axios";
 import dayjs from "dayjs";
 import useAuth from "../../hooks/useAuth";
