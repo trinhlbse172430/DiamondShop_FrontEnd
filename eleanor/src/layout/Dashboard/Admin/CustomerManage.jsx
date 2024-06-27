@@ -9,7 +9,7 @@ import { Table, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words'
-import './Dasboard.css'
+import './Dashboard.css'
 
 // -------------------------------STYLE MODAL----------------------
 const style = {

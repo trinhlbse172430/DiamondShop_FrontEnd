@@ -1,7 +1,7 @@
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./layout/Landingpage/LandingPage";
+import LandingPage from "./layout/LandingPage/LandingPage";
 import Login from "./layout/Auth/Login";
 import SignUp from "./layout/Auth/SignUp";
 import Cart from "./layout/Cart/Cart";
@@ -9,7 +9,7 @@ import ProductListNKC from "./layout/Product/ProductListNKC";
 import ProductDetail from "./layout/Product/ProductDetail";
 import Checkout from "./layout/Checkout/Checkout";
 import LoginEmp from "./layout/Dashboard/Auth/LoginEmp";
-import RequireAuth from "./components/RequireAuth";
+import RequireAuth from './components/RequireAuth.jsx'
 import Dashboard from "./layout/Dashboard/DashBoard";
 import EmployeeManage from "./layout/Dashboard/Admin/EmployeeManage";
 import CustomerManage from "./layout/Dashboard/Admin/CustomerManage";
