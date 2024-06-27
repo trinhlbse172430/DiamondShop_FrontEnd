@@ -12,7 +12,7 @@ import {
     CardMedia,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Link as RouterLink, useParams, useLocation } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import './css/product.css'
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -33,7 +33,6 @@ const numberToVND = (number) => {
 
 function ProductItem({ product }) {
     const { ProductID } = product;
-
 
     return (
         <Grid item="true" xs={12} sm={6} md={4} lg={3}>
@@ -69,48 +68,32 @@ function ProductItem({ product }) {
 }
 
 
-export default function ProductList() {
+export default function ProductListBT() {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 8;
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const searchValue = searchParams.get('search');
 
     //-----------------useEffect-----------------
 
     useEffect(() => {
         loadAllProduct();
-    }, [searchValue]);
+    }, []);
 
     //-----------------handle--------------------
     const loadAllProduct = async () => {
-        console.log('search', searchValue);
-        if (searchValue) {
-            try {
-                const loadData = await axios.get(`/product/search/${searchValue}`);
-                if (loadData.error) {
-                    console.log('erroe' + loadData.error);
-                } else {
-                    setData(loadData.data)
-                }
-            } catch (error) {
-                console.log(error);
+        try {
+            const loadData = await axios.get('/product');
+            if (loadData.error) {
+                console.log('erroe' + loadData.error);
+            } else {
+                //get data that have ProTypeID = BONGTAI
+                loadData.data = loadData.data.filter((product) => product.ProTypeID === 'BONGTAI');
+                setData(loadData.data)
+                console.log('data', loadData.data);
             }
-        } else {
-            try {
-                const loadData = await axios.get('/product');
-                if (loadData.error) {
-                    console.log('erroe' + loadData.error);
-                } else {
-                    setData(loadData.data)
-                    console.log('data', loadData.data);
-                }
-            } catch (error) {
-                console.log(error);
-            }
+        } catch (error) {
+            console.log(error);
         }
-
     }
 
     const handlePageChange = (page) => {
@@ -139,15 +122,15 @@ export default function ProductList() {
                         underline="hover"
                         sx={{ display: "flex", alignItems: "center" }}
                         color="#ffffff"
-                        href="/product"
+                        href="/product/bt"
                     >
-                        Sản phẩm
+                        Bông tai kim cương
                     </Link>
                 </Breadcrumbs>
                 <Box className="main-content-cart" >
 
                     <Typography variant="h3" className="custom_blog_title" style={{ textAlign: 'center' }}>
-                        Sản phẩm
+                        Bông tai kim cương
                     </Typography>
                     <Box className="site-main">
                         <Grid container spacing={2}>
