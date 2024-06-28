@@ -4,7 +4,10 @@ import { MenuOutlined, ShoppingCartOutlined, DownOutlined, RightOutlined } from 
 import SlideBarMenu from "../SlideBarMenu/SlideBarMenu";
 
 const Footer = () => {
+    
+    
     return (
+      
         <footer id="footer" class="footer-wrapper">
             <div class="footer-widgets footer footer-1">
                 <div class="row dark large-columns-4 mb-0">
@@ -13,40 +16,42 @@ const Footer = () => {
                             <img src="https://daokimcuong.vn/wp-content/uploads/2021/05/logo1-removebg-preview-1.png" alt="Logo Cao Hùng Diamond Footer" style={{ maxWidth: '90px', display: 'block', margin: ' 0 auto 20px' }} data-lazy-src="/wp-content/uploads/2020/08/logo-caohung250.png" />
                             <noscript>
                                 <img src="/wp-content/uploads/2020/08/logo-caohung250.png" alt="Logo Cao Hùng Diamond Footer" style={{ maxWidth: '90px', display: 'block', margin: ' 0 auto 20px' }} />
-                            </noscript>
+                   </noscript>
                             <ul>
                                 <li>
-                                    <span class="widget-title">Công Ty TNHH Cao Hùng Diamond</span>
+                                    <span class="widget-title">Eleanor Diamond</span>
                                 </li>
-                                <li>Giấy phép kinh doanh số: 0316398901 do sở Kế hoạch và Đầu tư TP.HCM cấp ngày 22/07/2020 </li>
+                                {/* <li>Giấy phép kinh doanh số: 0316398901 do sở Kế hoạch và Đầu tư TP.HCM cấp ngày 22/07/2020 </li> */}
                                 <li>
                                     <a href="mailto:caohungdiamond@gmail.com">
                                         <i class="fa-solid fa-envelope"></i>
-                                        caohungdiamond@gmail.com
+                                        Eleanordiamond@gmail.com
                                     </a>
                                 </li>
                                 <li>
                                     <i class="fa-solid fa-location-dot"></i>
-                                    Hệ thống showrooms <br />
-                                    CN HCM: 35 Trần Phú, Phường 4, Quận 5, TP. HCM <br />CN CT: 53 Trần Phú, Ninh Kiều, Cần Thơ
+                                   Các chi nhánh <br />
+                                    CN HCM: 35 Trần Phú, Phường 4, Quận 5, TP. HCM
+                                     <br />
+                                     {/* CN CT: 53 Trần Phú, Ninh Kiều, Cần Thơ */}
                                 </li>
                                 <li id="callfooter">
                                     <i class="fa-solid fa-phone"></i>
-                                    0933 1977 55 - 0877 056 688
+                                    0999 9999 99 - 0888 888 888
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div id="custom_html-4" class="widget_text col pb-0 widget widget_custom_html">
-                        <span class="widget-title">Thông tin công ty</span>
+                        <span class="widget-title">   FEATURES </span>
                         <div class="is-divider small"></div>
                         <div class="textwidget custom-html-widget">
                             <ul>
                                 <li>
-                                    <a href="/gioi-thieu/">Giới thiệu</a>
+                                    <a href="/gioi-thieu/">  Nhẫn Nam </a>
                                 </li>
                                 <li>
-                                    <a href="/tuyen-dung/">Tuyển dụng</a>
+                                    <a href="/tuyen-dung/">Nhẫn Nữ </a>
                                 </li>
                                 <li>
                                     <a href="/lien-he/">Liên hệ</a>
@@ -60,7 +65,7 @@ const Footer = () => {
                                 <li>
                                     <a href="/cam-nang-kim-cuong/">Cẩm nang kim cương</a>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <a href="/huong-dan-do-size-nhan/">Hướng dẫn đo size: Nhẫn kim cương</a>
                                 </li>
                                 <li>
@@ -74,7 +79,7 @@ const Footer = () => {
                                 </li>
                                 <li>
                                     <a href="/kinh-doanh-si/">Kinh doanh sỉ</a>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>
@@ -83,9 +88,7 @@ const Footer = () => {
                         <div class="is-divider small"></div>
                         <div class="textwidget custom-html-widget">
                             <ul>
-                                <li>
-                                    <a href="/thu-doi-san-pham/">Thu đổi sản phẩm</a>
-                                </li>
+                              
                                 <li>
                                     <a href="/chinh-sach-giao-hang/">Chính sách giao hàng</a>
                                 </li>
@@ -95,21 +98,15 @@ const Footer = () => {
                                 <li>
                                     <a href="/chinh-sach-bao-hanh/">Chính sách bảo hành</a>
                                 </li>
-                                <li>
-                                    <a href="/huong-dan-mua-hang/">Hướng dẫn mua hàng và thanh toán</a>
-                                </li>
-                                <li>
-                                    <a href="/mua-hang-tra-gop/">Mua hàng trả góp</a>
-                                </li>
+                               
+                              
                                 <li>
                                     <a href="/dieu-khoan-su-dung/">Điều khoản sử dụng</a>
                                 </li>
                                 <li>
                                     <a href="/chinh-sach-bao-mat/">Chính sách bảo mật</a>
                                 </li>
-                                <li>
-                                    <a href="/cam-ket-vo-trang-suc/">Cam kết về vỏ trang sức</a>
-                                </li>
+                              
                                 <li>
                                     <a href="/cam-ket-kim-cuong/">Cam kết về kim cương</a>
                                 </li>
@@ -171,7 +168,7 @@ const Footer = () => {
             <div class="absolute-footer dark medium-text-center small-text-center">
                 <div class="container clearfix">
                     <div class="footer-primary pull-left">
-                        <div class="copyright-footer">Copyright © 2024 Cao Hùng Diamond
+                        <div class="copyright-footer">Copyright © 2024 Eleanor Diamond
                         </div>
                     </div>
                 </div>
