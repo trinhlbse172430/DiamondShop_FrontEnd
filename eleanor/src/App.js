@@ -30,11 +30,15 @@ import ProductListVDC from "./layout/Product/ProductListVDC";
 import ProductListVN from "./layout/Product/ProductListVN";
 import ProductListVT from "./layout/Product/ProductListVT";
 import ProductList from "./layout/Product/ProductList";
+import Promotion from "./layout/Dashboard/Promotion/Promotion";
+import DeliveryPage from "./layout/Dashboard/Delivery/DeliveryOrder";
 
 const ROLES = {
   User: 2001,
   ADMIN: "Admin",
-  SALESSTAFF: "Sales Staff",
+  SALESSTAFF: "Sale",
+  DELIVERY: "Delivery",
+  MANAGER: "Manager",
   CUSTOMER: "Customer",
 };
 
@@ -47,20 +51,52 @@ function App() {
 
             <Route
               element={
+                <RequireAuth allowedRoles={[ROLES.MANAGER, ROLES.ADMIN]} />
+              }
+            >
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="/dashboard/product" element={<ProductManage />} />
+                <Route path="/dashboard/gold" element={<GoldManage />} />
+                <Route path="/dashboard/diamond" element={<DiamondManage />} />
+                <Route path="/dashboard/smalldiamond" element={<SmallDiamondManage />} />
+                <Route path="/dashboard/promotion" element={<Promotion />} />
+              </Route>
+            </Route>
+
+            <Route
+              element={
                 <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.SALESSTAFF]} />
+              }
+            >
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="/dashboard/order" element={<OrderManage />} />
+              </Route>
+            </Route>
+
+            <Route
+              element={
+                <RequireAuth allowedRoles={[ROLES.ADMIN]} />
               }
             >
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route path="/dashboard/home" element={<HomeDashboard />} />
                 <Route path="/dashboard/employee" element={<EmployeeManage />} />
                 <Route path="/dashboard/customer" element={<CustomerManage />} />
-                <Route path="/dashboard/product" element={<ProductManage />} />
                 <Route path="/dashboard/order" element={<OrderManage />} />
-                <Route path="/dashboard/gold" element={<GoldManage />} />
-                <Route path="/dashboard/diamond" element={<DiamondManage />} />
-                <Route path="/dashboard/smalldiamond" element={<SmallDiamondManage />} />
               </Route>
             </Route>
+
+            <Route
+              element={
+                <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.DELIVERY]} />
+              }
+            >
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="/dashboard/delivery" element={<DeliveryPage />} />
+              </Route>
+            </Route>
+
+
 
             <Route
               element={
