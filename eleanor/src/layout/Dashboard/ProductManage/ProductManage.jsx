@@ -215,7 +215,7 @@ const BasicTable = () => {
 
     const columns = [
         {
-            title: 'Product ID',
+            title: 'ID sản phẩm',
             dataIndex: 'ProductID',
             ...getColumnSearchProps('ProductID'),
             key: 'ProductID',
@@ -223,50 +223,87 @@ const BasicTable = () => {
             sortOrder: sortedInfo.columnKey === 'ProductID' ? sortedInfo.order : null,
         },
         {
-            title: 'ProTypeID',
-            dataIndex: 'ProTypeID',
-            ...getColumnSearchProps('ProTypeID'),
+            title: 'Tên sản phẩm',
+            dataIndex: 'ProName',
+            ...getColumnSearchProps('ProName'),
+            key: 'ProName',
+            sorter: (a, b) => a.ProName.length - b.ProName.length,
+            sortOrder: sortedInfo.columnKey === 'ProName' ? sortedInfo.order : null,
         },
         {
-            title: 'GoldID',
+            title: 'ID loại sản phẩm',
+            dataIndex: 'ProTypeID',
+            filters: [
+                {
+                    text: 'Nhẫn',
+                    value: 'NHAN',
+                },
+                {
+                    text: 'Vỏ nhẫn',
+                    value: 'VONHAN',
+                },
+                {
+                    text: 'Dây chuyền',
+                    value: 'CHUYEN',
+                },
+                {
+                    text: 'Vỏ dây chuyền',
+                    value: 'VOCHUYEN',
+                },
+                {
+                    text: 'Vòng tay',
+                    value: 'VONGTAY',
+                },
+                {
+                    text: 'Bông tai',
+                    value: 'BONGTAI',
+                },
+            ],
+            onFilter: (value, record) => record.ProTypeID.indexOf(value) === 0,
+        },
+        {
+            title: 'ID vàng',
             dataIndex: 'GoldID',
             ...getColumnSearchProps('GoldID'),
         },
         {
-            title: 'DiamondID',
+            title: 'ID kim cương',
             dataIndex: 'DiamondID',
 
         },
         {
-            title: 'DiamondSmallID',
+            title: 'ID kim cương nhỏ',
             dataIndex: 'DiamondSmallID',
         },
         {
-            title: 'DiaSmallQuantity',
+            title: 'Số lượng viên nhỏ',
             dataIndex: 'DiaSmallQuantity',
         },
         {
-            title: 'WagePrice',
+            title: 'Giá gia công',
             dataIndex: 'WagePrice',
+        },
+        {
+            title: 'Mệnh giá',
+            dataIndex: 'Currency',
         },
         {
             title: 'Ration',
             dataIndex: 'Ration',
         },
         //button edit
-        {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => (
-                <Space size="middle">
-                    <Button onClick={(e) => handleGetProductById(record.ProductID)} >EDIT</Button>
-                </Space>
-            ),
-        },
+        // {
+        //     title: 'Action',
+        //     key: 'action',
+        //     render: (text, record) => (
+        //         <Space size="middle">
+        //             <Button onClick={(e) => handleGetProductById(record.ProductID)} >EDIT</Button>
+        //         </Space>
+        //     ),
+        // },
     ];
 
     const onChange = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
         setSortedInfo(sorter);
     };
 
@@ -290,7 +327,14 @@ const BasicTable = () => {
 
 
                         <div className="table-container">
-                            <Table columns={columns} dataSource={data} onChange={onChange} />
+                            <Table columns={columns} dataSource={data} onChange={onChange}
+                                onRow={(record) => {
+                                    return {
+                                        onClick: (e) => handleGetProductById(record.ProductID)
+                                    }
+
+                                }}
+                            />
                         </div>
 
 

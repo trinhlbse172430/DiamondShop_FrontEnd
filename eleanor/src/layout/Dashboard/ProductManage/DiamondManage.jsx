@@ -5,7 +5,6 @@ import ButtonCustomize from "../../../components/Button/Button";
 import { useRef, useState, useEffect, useCallback } from "react";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { Table, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
@@ -15,18 +14,84 @@ import { Modal } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { notification } from 'antd';
 
+const numberToVND = (number) => {
+    //check if number is string
+    if (typeof number === 'string') {
+        number = parseInt(number);
+    }
+    return number.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+    });
+};
 
 const { confirm } = Modal;
+
+const EditModal = ({ visible, onCreate, onCancel, dataEdit }) => {
+    const [DiaPrice, setDiaPrice] = useState(0);
+
+    useEffect(() => {
+        if (visible && dataEdit) {
+            setDiaPrice(dataEdit.DiaPrice);
+        }
+    }, [visible]);
+
+    const handleUpdateDiaPrice = async () => {
+        try {
+            const response = await axios.put(`/dia_price/${dataEdit.DiaPriceID}`, { DiaPrice });
+            if (response.status === 200) {
+                openNotificationWithIcon('success', 'Update price success');
+                onCreate();
+            }
+        } catch (error) {
+            console.error(error);
+            openNotificationWithIcon('error', 'Update price failed');
+        }
+    }
+
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type, des) => {
+        api[type]({
+            message: 'Notification Title',
+            description: des,
+        });
+    };
+
+    return (
+        <Modal
+            visible={visible}
+            title="Edit Price"
+            okText="Edit"
+            cancelText="Cancel"
+            onCancel={onCancel}
+            onOk={handleUpdateDiaPrice}
+        >
+            {contextHolder}
+            <label>Diamond Price:</label>
+            <Input
+                type="number"
+                placeholder="Price"
+                value={DiaPrice}
+                onChange={(e) => setDiaPrice(e.target.value)}
+            />
+        </Modal>
+    );
+};
+
 
 
 const BasicTable = () => {
     const context = useAuth();
-
     const [data, setData] = useState([]);
     const [diaOrigin, setDiaOrigin] = useState([]);
     const [diaColor, setDiaColor] = useState([]);
     const [modalCreateVisible, setModalCreateVisible] = useState(false);
     const [diaClarity, setDiaClarity] = useState([]);
+    const [product, setProduct] = useState([]);
+    const [diaPriceList, setDiaPriceList] = useState([]);
+    const [tableData, setTableData] = useState([]);
+    const [modalEditVisible, setModalEditVisible] = useState(false);
+    const [dataEdit, setDataEdit] = useState([]);
 
     // ----------------------------------- API GET ALL DIAMOND --------------------------------
     async function loadAllDiamond(page, limit) {
@@ -38,6 +103,24 @@ const BasicTable = () => {
                 .then((data) => {
                     setData(data.data);
                 })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const loadAllDiamondPrice = async (data) => {
+        try {
+            const loadData = await axios.get('/dia_price')
+            if (loadData) {
+                data.map((item) => {
+                    const price = loadData.data.find((price) => price.DiaPriceID === item.DiamondID);
+                    if (price) {
+                        item.DiaPrice = price.DiaPrice;
+                    }
+                })
+            }
+            console.log('data' + data);
+            setTableData(data);
         } catch (err) {
             console.log(err);
         }
@@ -73,8 +156,19 @@ const BasicTable = () => {
             const loadData = await axios.get(
                 `/dia_clarity`)
                 .then((data) => {
-                    console.log('clarity' + data.data);
                     setDiaClarity(data.data);
+                })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const loadAllProduct = async () => {
+        try {
+            const loadData = await axios.get(
+                `/product`)
+                .then((data) => {
+                    setProduct(data.data);
                 })
         } catch (err) {
             console.log(err);
@@ -83,11 +177,16 @@ const BasicTable = () => {
 
 
     useEffect(() => {
+        loadAllProduct();
         loadAllDiamond();
         loadAllDiamondOrigin();
         loadAllDiaColor();
         loadAllDiaClarity();
     }, []);
+
+    useEffect(() => {
+        loadAllDiamondPrice(data);
+    }, [data]);
 
     // --------------------- HANDLE OPEN CREATE GOLD ----------------------------
     const handleOpenCreateModal = () => {
@@ -103,6 +202,20 @@ const BasicTable = () => {
         setModalCreateVisible(false);
     }
 
+    // --------------------- HANDLE OPEN EDIT PRICE ----------------------------
+    const handleOpenEditModal = () => {
+        setModalEditVisible(true);
+    };
+
+    const handleEditModal = (values) => {
+        setModalEditVisible(false);
+        loadAllDiamond();
+    }
+
+    const handleCancelEditModal = () => {
+        setModalEditVisible(false);
+    }
+
     // --------------------- HANDLE DELETE DIAMOND ----------------------------
     const handleDelete = async (DiaID) => {
         try {
@@ -113,20 +226,61 @@ const BasicTable = () => {
             }
         } catch (error) {
             console.error(error);
-            toast.error("Delete failed");
         }
+
+        try {
+            const response = await axios.delete(`/dia_price/${DiaID}`);
+            if (response.status === 204) {
+                openNotificationWithIcon('success', 'Delete price success');
+                loadAllDiamond();
+            }
+        } catch (error) {
+            console.error(error);
+            openNotificationWithIcon('error', 'Delete price failed');
+        }
+    }
+
+    const handleDeleteProduct = async (DiaID) => {
+        product.map((item) => {
+            if (item.DiamondID === DiaID) {
+                try {
+                    const response = axios.delete(`/product/${item.ProductID}`);
+                    if (response.status === 204) {
+                        openNotificationWithIcon('success', 'Delete product success');
+                        loadAllProduct();
+                    }
+                } catch (error) {
+                    console.error(error);
+                    openNotificationWithIcon('error', 'Delete product failed');
+                }
+            }
+        }
+        )
+    }
+
+    const handleGetDiamondById = async (DiaID) => {
+        try {
+            const response = await axios.get(`/dia_price/${DiaID}`);
+            setDataEdit(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+        handleOpenEditModal();
     }
 
 
     // --- noti ---
     const showConfirm = (DiaID) => {
         confirm({
-            title: 'Delete Gold?',
+            title: 'Delete diamond ' + DiaID + '?',
             icon: <ExclamationCircleFilled />,
-            content: '-------------------',
+            content: 'WARNING: This will delete all products that contain this diamond. Are you sure?',
             onOk() {
                 console.log('Yes');
-                handleDelete(DiaID);
+                handleDeleteProduct(DiaID).then(() => {
+                    handleDelete(DiaID);
+                }
+                );
             },
             onCancel() {
                 console.log('No');
@@ -272,11 +426,6 @@ const BasicTable = () => {
             sortOrder: sortedInfo.columnKey === 'DiamondID' ? sortedInfo.order : null,
         },
         {
-            title: 'GIAID',
-            dataIndex: 'GIAID',
-            ...getColumnSearchProps('GIAID'),
-        },
-        {
             title: 'DiaOrigin',
             dataIndex: 'DiaOriginID',
             render: (text, record) => {
@@ -294,15 +443,8 @@ const BasicTable = () => {
             },
             ...getColumnSearchProps('DiaOriginID'),
         },
-
-
         {
-            title: 'DiaWeight',
-            dataIndex: 'DiaWeight',
-
-        },
-        {
-            title: 'DiaColorID',
+            title: 'Màu kim cương',
             dataIndex: 'DiaColorID',
             render: (text, record) => {
                 const color = diaColor.find(item => item.DiaColorID === record.DiaColorID);
@@ -316,7 +458,7 @@ const BasicTable = () => {
             },
         },
         {
-            title: 'DiaClarityID',
+            title: 'Độ trong',
             dataIndex: 'DiaClarityID',
             render: (text, record) => {
                 const clarity = diaClarity.find(item => item.DiaClarityID === record.DiaClarityID);
@@ -331,19 +473,43 @@ const BasicTable = () => {
             },
         },
         {
-            title: 'DiaCut',
+            title: 'Cân nặng',
+            dataIndex: 'DiaWeight',
+
+        },
+        {
+            title: 'Đơn vị',
+            dataIndex: 'DiaUnit',
+        },
+        {
+            title: 'Hình dáng',
             dataIndex: 'DiaCut',
+        },
+        {
+            title: 'Giá',
+            dataIndex: 'DiaPrice',
+            render: (DiaPrice) => numberToVND(DiaPrice),
         },
         //button edit
         {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button onClick={(e) => showConfirm(record.DiamondID)}>DELETE</Button>
+                    <Button onClick={(e) => handleGetDiamondById(record.DiamondID)}>EDIT PRICE</Button>
                 </Space>
             ),
         },
+        // {
+        //     title: '',
+        //     key: 'action',
+        //     render: (text, record) => (
+        //         <Space size="middle">
+        //             <Button onClick={(e) => showConfirm(record.DiamondID)}>DELETE</Button>
+        //         </Space>
+        //     ),
+        // },
+
     ];
 
     const onChange = (pagination, filters, sorter, extra) => {
@@ -371,7 +537,7 @@ const BasicTable = () => {
                             startIcon={<AddCircleOutlineIcon />}
                         />
 
-                        <Table columns={columns} dataSource={data} onChange={onChange} />
+                        <Table columns={columns} dataSource={tableData} onChange={onChange} />
 
                         <DiamondCreateModal
                             visible={modalCreateVisible}
@@ -379,6 +545,13 @@ const BasicTable = () => {
                             onCancel={handleCancelCreateModal}
                             DiaOriginList={diaOrigin}
                             DiaColorList={diaColor}
+                        />
+
+                        <EditModal
+                            visible={modalEditVisible}
+                            onCreate={handleEditModal}
+                            onCancel={handleCancelEditModal}
+                            dataEdit={dataEdit}
                         />
                     </>
             }

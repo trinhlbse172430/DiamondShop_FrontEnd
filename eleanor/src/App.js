@@ -32,6 +32,9 @@ import ProductListVT from "./layout/Product/ProductListVT";
 import ProductList from "./layout/Product/ProductList";
 import Promotion from "./layout/Dashboard/Promotion/Promotion";
 import DeliveryPage from "./layout/Dashboard/Delivery/DeliveryOrder";
+import BlogPage from "./layout/Common/blog";
+import Success from "./layout/Common/Success";
+import Fail from "./layout/Common/Fail";
 
 const ROLES = {
   User: 2001,
@@ -110,7 +113,7 @@ function App() {
             </Route>
 
 
- 
+
             <Route path="/" element={<LandingPage />} />
 
             {/* authen */}
@@ -138,7 +141,9 @@ function App() {
             <Route path="/niSize" element={<NiSizePage />} />
             <Route path="/introduction" element={<IntroductionPage />} />
             <Route path="/price-list" element={<PricePage />} />
-
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/fail" element={<Fail />} />
           </Routes>
         </BrowserRouter>
       </LocalizationProvider>

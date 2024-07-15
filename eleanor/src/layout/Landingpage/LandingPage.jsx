@@ -2,7 +2,6 @@
 import './LandingPage.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -12,7 +11,6 @@ import Banner from '../../image/banner2.jpg'
 import SmallBanner from '../../image/smallBanner.png'
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import ProductItem from '../Product/Components/ProductItem';
 import {
     Box,
@@ -226,17 +224,17 @@ const Home = () => {
                                         </div>
                                         <div className="product-category col is-selected" style={{ position: 'absolute' }}>
                                             <div className="col-inner">
-                                                <a aria-label="Visit product category Nhẫn Kim Cương Nam" href="/product/vn">
+                                                <a aria-label="Visit product category Nhẫn Kim Cương Nam" href="/product/dc">
                                                     <div className="box box-category has-hover box-normal ">
                                                         <div className="box-image">
                                                             <div className="">
-                                                                <img decoding="async" src="https://caohungdiamond.com/wp-content/uploads/2022/06/vo-nhan.png" alt="Nhẫn Kim Cương Nam" width="300" height="300" data-lazy-src="https://caohungdiamond.com/wp-content/uploads/2022/06/nhan-nam.png" data-ll-status="loaded" className="entered lazyloaded" />
+                                                                <img decoding="async" src="https://caohungdiamond.com/wp-content/uploads/2024/04/i-mat-day-chuyen-kim-cuong.png" alt="Nhẫn Kim Cương Nam" width="300" height="300" data-lazy-src="https://caohungdiamond.com/wp-content/uploads/2022/06/nhan-nam.png" data-ll-status="loaded" className="entered lazyloaded" />
                                                             </div>
                                                         </div>
                                                         <div className="box-text text-center">
                                                             <div className="box-text-inner">
                                                                 <h5 className="uppercase header-title">
-                                                                    Vỏ nhẫn kim cương
+                                                                    Dây chuyền kim cương
                                                                 </h5>
 
                                                             </div>
@@ -497,7 +495,6 @@ const Home = () => {
                     </div>
                 </div >
             </section >
-         
             <Footer />
         </>
     );

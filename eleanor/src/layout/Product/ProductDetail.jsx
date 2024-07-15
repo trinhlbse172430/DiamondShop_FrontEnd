@@ -19,8 +19,7 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { notification } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Modal } from 'antd';
-
-
+import ProductItem from "./Components/ProductItem";
 
 const { confirm } = Modal;
 
@@ -67,7 +66,7 @@ const ProductDetail = () => {
     const [goldType, setGoldType] = useState(null);
     const [proTypeName, setProTypeName] = useState(null);
     const [diamondInfo, setDiamondInfo] = useState(null);
-
+    const [data, setData] = useState([]);
 
 
     //----------------------Handle Function----------------------
@@ -181,7 +180,42 @@ const ProductDetail = () => {
         }
     };
 
-
+    const loadDataProductRelated = async (product) => {
+        console.log("sss" + product.ProTypeID);
+        try {
+            const response = await axios.get(`/product`);
+            if (response.error) {
+                console.log("Error");
+            } else {
+                if (product.ProTypeID === "NHAN") {
+                    const data = response.data.filter((item) => item.ProTypeID === "NHAN");
+                    setData(data);
+                }
+                if (product.ProTypeID === "VONGTAY") {
+                    const data = response.data.filter((item) => item.ProTypeID === "VONGTAY");
+                    setData(data);
+                }
+                if (product.ProTypeID === "CHUYEN") {
+                    const data = response.data.filter((item) => item.ProTypeID === "CHUYEN");
+                    setData(data);
+                }
+                if (product.ProTypeID === "VONHAN") {
+                    const data = response.data.filter((item) => item.ProTypeID === "VONHAN");
+                    setData(data);
+                }
+                if (product.ProTypeID === "VOCHUYEN") {
+                    const data = response.data.filter((item) => item.ProTypeID === "VOCHUYEN");
+                    setData(data);
+                }
+                if (product.ProTypeID === "BONGTAI") {
+                    const data = response.data.filter((item) => item.ProTypeID === "BONGTAI");
+                    setData(data);
+                }
+            }
+        } catch {
+            console.log("Error loadDataProductRelated");
+        }
+    }
 
     //handle total price
     useEffect(() => {
@@ -208,6 +242,7 @@ const ProductDetail = () => {
             loadDiamondSmall();
             loadProTypeName();
             loadDiamondInfo();
+            loadDataProductRelated(product);
         }
     }, [product]);
 
@@ -216,6 +251,10 @@ const ProductDetail = () => {
             loadGoldType();
         }
     }, [gold]);
+
+    useEffect(() => {
+        console.log("data", data);
+    }, [data]);
 
 
 
@@ -252,6 +291,8 @@ const ProductDetail = () => {
                 TotalPrice: totalPrice,
                 ProTypeID: product.ProTypeID,
                 CusSize: NiSize,
+                ProName: product.ProName,
+                Ration: product.Ration,
             }
             //check if product in cart has same productID, goldTypeID, DiaPriceID, DiaSmallPriceID => increase quantity
             for (let i = 0; i < cart.length; i++) {
@@ -340,7 +381,7 @@ const ProductDetail = () => {
                             <Box>
                                 <img
                                     className="img_zoom"
-                                    src="https://caohungdiamond.com/wp-content/uploads/2023/11/vt0159-3-510x510.jpg"
+                                    src={product && product.ProPicture}
                                     alt="img"
                                     style={{ width: "-webkit-fill-available" }}
                                 />
@@ -353,31 +394,31 @@ const ProductDetail = () => {
                             <div className="product-infor" style={{ paddingTop: '20px' }}>
                                 <Grid container spacing={2}>
                                     <Grid item="true" xs={6}>
-                                        <p><strong>Chất liệu:</strong></p>
+                                        <p style={{ color: '#fff', important: 'true' }}><strong>Chất liệu:</strong></p>
                                     </Grid>
                                     <Grid item="true" xs={3}>
                                         {goldType && (
-                                            <p><strong>{goldType.GoldTypeName}</strong></p>
+                                            <p style={{ color: '#fff', important: 'true' }}><strong>{goldType.GoldTypeName}</strong></p>
                                         )}
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item="true" xs={6}>
-                                        <p><strong>Viên chính:</strong></p>
+                                        <p style={{ color: '#fff', important: 'true' }}><strong>Viên chính:</strong></p>
                                     </Grid>
                                     <Grid item="true" xs={3}>
-                                        <p><strong>{diamond && diamond.DiaWeight} ly</strong></p>
+                                        <p style={{ color: '#fff', important: 'true' }}><strong>{diamond && diamond.DiaWeight} ly</strong></p>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item="true" xs={6}>
-                                        <p><strong>Viên phụ:</strong></p>
+                                        <p style={{ color: '#fff', important: 'true' }}><strong>Viên phụ:</strong></p>
                                     </Grid>
                                     <Grid item="true" xs={3}>
-                                        <p><strong>{diamondSmall && diamondSmall.DiaSmallWeight} ly</strong></p>
+                                        <p style={{ color: '#fff', important: 'true' }}><strong>{diamondSmall && diamondSmall.DiaSmallWeight} ly</strong></p>
                                     </Grid>
                                 </Grid>
-                                <p>
+                                <p style={{ color: '#fff', important: 'true' }}>
                                     <strong>Mã sản phẩm: {product && product.ProductID} </strong>
                                 </p>
 
@@ -385,7 +426,7 @@ const ProductDetail = () => {
                                 {product && product.ProTypeID === "NHAN" ? (
                                     <Grid container spacing={2}>
                                         <Grid item="true" xs={6}>
-                                            <p><strong>Chọn Ni:</strong></p>
+                                            <p style={{ color: '#fff', important: 'true' }}><strong>Chọn Ni:</strong></p>
                                         </Grid>
                                         <Grid item xs={3}>
                                             <select value={NiSize} onChange={(e) => setNiSize(e.target.value)} >
@@ -409,7 +450,7 @@ const ProductDetail = () => {
                                 {product && product.ProTypeID === "VONGTAY" ? (
                                     <Grid container spacing={2}>
                                         <Grid item="true" xs={6}>
-                                            <p><strong>Chọn Ni:</strong></p>
+                                            <p><strong style={{ color: '#fff', important: 'true' }}>Chọn Ni:</strong></p>
                                         </Grid>
                                         <Grid item xs={3}>
                                             <select value={NiSize} onChange={(e) => setNiSize(e.target.value)} >
@@ -441,7 +482,7 @@ const ProductDetail = () => {
                             <Box className="quantity-add-to-cart">
                                 <Grid container spacing={2}>
                                     <Grid item="true" xs={6}>
-                                        <p>Chọn số lượng:</p>
+                                        <p style={{ color: '#fff', important: 'true' }}>Chọn số lượng:</p>
                                     </Grid>
                                     <Grid item="true" xs={2}>
                                         <Button
@@ -554,10 +595,30 @@ const ProductDetail = () => {
                             </tr>
                         </tbody>
                     </table>
-                    {/* <Typography theme={theme} variant="h5" style={{ marginBottom: '20px', color: '#fff', textAlign: 'left' }}>
-                        2. Thông tin sản phẩm
-                    </Typography> */}
+                    <Typography theme={theme} variant="h5" style={{ marginBottom: '20px', color: '#fff', textAlign: 'left' }}>
+                        2. Giấy xác nhận GIA
+                    </Typography>
+                    {/* image GIA */}
+                    <img src={diamondInfo && diamondInfo.GIAPicture} alt="GIA" style={{ width: '60%', height: 'auto' }} />
+
                 </Box>
+
+                <Box className="tab-details-product" sx={{ paddingTop: '100px' }}>
+                    <Typography theme={theme} variant="h5" style={{ marginBottom: '20px', color: '#fff', textAlign: 'left' }}>
+                        SẢN PHẨM LIÊN QUAN
+                    </Typography>
+                    <Grid container spacing={2}>
+
+                        {!data || data.length === 0 ? (
+                            <Typography variant="h5" style={{ textAlign: 'center' }}></Typography>
+                        ) : (
+                            data.map((product) => (
+                                <ProductItem key={product.ProductID} product={product} />
+                            ))
+                        )}
+                    </Grid>
+                </Box>
+
             </Container>
 
             <Footer />

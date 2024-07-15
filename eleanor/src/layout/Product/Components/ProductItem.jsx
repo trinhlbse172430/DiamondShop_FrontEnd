@@ -93,6 +93,7 @@ export default function ProductItem({ product }) {
             const diamondPrice = diamond.DiaPrice * diamond.DiaWeight;
             const diamondSmallPrice = diamondSmall.DiaSmallPrice * diamondSmall.DiaSmallWeight;
             const total = goldPrice + diamondPrice + diamondSmallPrice + parseFloat(product.WagePrice);
+            console.log(diamondSmallPrice, diamondPrice, goldPrice, parseFloat(product.WagePrice));
             setTotalPrice(total);
         }
     }

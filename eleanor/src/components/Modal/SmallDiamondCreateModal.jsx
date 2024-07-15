@@ -12,6 +12,7 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
     const [DiaWeight, setDiaWeight] = useState(1);
     const [DiaOriginList, setDiaOriginList] = useState([]);
     const [DiaColorList, setDiaColorList] = useState([]);
+    const [DiaPrice, setDiaPrice] = useState(100000);
 
     useEffect(() => {
         if (visible) {
@@ -51,16 +52,21 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
             return;
         }
         //check DiaID existed else continue
-        const DiaID = DiaOriginID + DiaColorID + DiaWeight + 'LY';
+
+        let weight = DiaWeight.toString();
+        if (DiaWeight < 10) {
+            weight = '0' + DiaWeight;
+        }
+        let DiaID = DiaOriginID + DiaColorID + weight; //+'LY'
         try {
-            const response = await axios.get(`/diamond`);
+            const response = await axios.get(`/diamond_small`);
             const list = response.data;
 
             // Check if DiaID already exists in the list
-            const existingDiamond = list.find(diamond => diamond.DiamondID === DiaID);
+            const existingDiamond = list.find(diamond_small => diamond_small.DiaSmallID === DiaID);
 
             if (existingDiamond) {
-                openNotificationWithIcon('error', 'DiamondID already exists');
+                openNotificationWithIcon('error', 'DiaSmall already exists');
                 return;
             }
         } catch (error) {
@@ -80,6 +86,20 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
                 openNotificationWithIcon('success', 'Create diamond successfully');
                 console.log(response);
                 onCreate();
+            });
+
+            axios.post(`/dia_small_price`, {
+                DiaSmallPriceID: DiaID,
+                DiaSmallPrice: DiaPrice,
+                DiaSmallInputDate: moment().format('YYYY-MM-DD'),
+                DiaSmallOriginID: DiaOriginID,
+                DiaSmallColorID: DiaColorID,
+                DiaSmallWeight: DiaWeight,
+                DiaSmallUnit: 'Ly',
+                Currency: 'VND'
+
+            }).then((response) => {
+                console.log(response);
             });
         } catch (error) {
             console.log(error);
@@ -144,6 +164,10 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
             <div style={{ marginBottom: 16 }}>
                 <label>Diamond Weight:</label>
                 <InputNumber style={{ width: '100%' }} min={1} max={20} defaultValue={1} onChange={(value) => setDiaWeight(value)} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+                <label>Diamond Price:</label>
+                <InputNumber style={{ width: '100%' }} min={1} max={1000000000} defaultValue={100000} onChange={(value) => setDiaPrice(value)} />
             </div>
         </Modal>
     );
