@@ -17,61 +17,12 @@ import './css/product.css'
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Pagination } from 'antd';
-
-
-const numberToVND = (number) => {
-    //convert string to number
-    number = Number(number);
-
-    return number.toLocaleString("vi-VN", {
-        style: "currency",
-        currency: "VND",
-    });
-};
-
-// Example of correct usage in ProductItem component
-
-function ProductItem({ product }) {
-    const { ProductID } = product;
-
-    return (
-        <Grid item="true" xs={12} sm={6} md={4} lg={3}>
-            <Card className="product-card">
-                <CardActionArea component={RouterLink} to={`/product/${ProductID}`}>
-                    <CardContent sx={{ textAlign: "center", padding: '0 0 0 0', backgroundColor: '#2a2a2a' }}>
-                        <CardMedia
-                            component="img"
-                            image={'https://caohungdiamond.com/wp-content/uploads/2023/11/vt0159-3-510x510.jpg'}
-                            //alt={}
-                            style={{ padding: '9px 9px' }}
-                        />
-                        <Typography gutterBottom variant="h6" component="div" className="product-title">
-                            {product.ProName ? product.ProName : "Product name"}
-                        </Typography>
-                        <Typography gutterBottom variant="body2" component="div" className="product-code">
-                            {product.ProductID ? product.ProductID : "Product code"}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" className="product-price">
-                            {product.WagePrice ? (
-                                <Typography gutterBottom variant="h6" component="div" style={{ color: "#ebbc6c" }}>
-                                    Giá gia công: {numberToVND(product.WagePrice)}
-                                </Typography>
-                            ) : (
-                                "Price VND"
-                            )}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
-        </Grid>
-    );
-}
-
+import ProductItem from "./Components/ProductItem";
 
 export default function ProductListVN() {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 4;
+    const pageSize = 10;
 
     //-----------------useEffect-----------------
 

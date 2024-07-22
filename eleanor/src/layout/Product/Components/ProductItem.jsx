@@ -99,10 +99,15 @@ export default function ProductItem({ product }) {
     }
         , [product, gold, diamond, diamondSmall]);
 
+    const handleLinkClick = () => {
+        window.scrollTo(0, 0); // Scrolls to the top of the page
+    };
+
+
     return (
         <Grid item="true" xs={4} sm={4} md={3} lg={2.4}>
             <Card className="product-card">
-                <CardActionArea component={RouterLink} to={`/product/${ProductID}`}>
+                <CardActionArea component={RouterLink} to={`/product/${ProductID}`} onClick={handleLinkClick}>
                     <CardContent sx={{ textAlign: "center", padding: '0 0 0 0', backgroundColor: '#2a2a2a' }}>
                         <CardMedia
                             component="img"

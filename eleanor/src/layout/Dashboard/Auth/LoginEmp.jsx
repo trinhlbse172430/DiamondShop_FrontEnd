@@ -75,6 +75,9 @@ const LoginEmp = () => {
                 if (res.data.error) {
                     openNotificationWithIcon('error', res.data.error);
                 }
+                else if (res.data.EmpStatus === 2) {
+                    openNotificationWithIcon('error', 'Tài khoản của bạn đã bị khóa');
+                }
                 else {
                     const dataDecode = jwtDecode(res.data.token);
                     localStorage.setItem("token", res.data.token);
@@ -89,7 +92,19 @@ const LoginEmp = () => {
                         token: res.data.token,
                         role: role.RoleName,
                     });
-                    navigate("/");
+                    if (role.RoleName === "Admin") {
+                        navigate("/dashboard/home");
+                    }
+                    else if (role.RoleName === "Manager") {
+                        navigate("/dashboard/product");
+                    }
+                    else if (role.RoleName === "Sale") {
+                        navigate("/dashboard/order");
+                    } else if (role.RoleName === "Delivery") {
+                        navigate("/dashboard/delivery");
+                    } else {
+                        navigate("/");
+                    }
                     openNotificationWithIcon('success', 'Đăng nhập thành công');
                 }
             });

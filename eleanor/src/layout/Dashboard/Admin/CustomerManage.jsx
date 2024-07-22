@@ -9,7 +9,7 @@ import { Table, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words'
-import './Dashboard.css'
+import './Dasboard.css'
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -186,9 +186,9 @@ const BasicTable = () => {
             sortOrder: sortedInfo.columnKey === 'CusName' ? sortedInfo.order : null,
         },
         {
-            title: 'Địa chỉ',
-            dataIndex: 'CusAddress',
-            ...getColumnSearchProps('CusAddress'),
+            title: 'Email',
+            dataIndex: 'CusEmail',
+            ...getColumnSearchProps('CusEmail'),
         },
         {
             title: 'SĐT',
@@ -197,7 +197,7 @@ const BasicTable = () => {
             ...getColumnSearchProps('CusPhone'),
         },
         {
-            title: 'Point',
+            title: 'Điểm',
             dataIndex: 'CusPoint',
             key: 'CusPoint',
             sorter: (a, b) => a.CusPoint - b.CusPoint,
