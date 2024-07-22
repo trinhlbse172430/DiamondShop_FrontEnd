@@ -14,6 +14,7 @@ import GoldCreateModal from "../../../components/Modal/GoldCreateModal";
 import { Modal } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { notification } from 'antd';
+import GoldDetailModal from "../../../components/Modal/GoldDetailModal";
 
 const numberToVND = (number) => {
     //check if number is string
@@ -84,9 +85,11 @@ const BasicTable = () => {
     const [data, setData] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalCreateVisible, setModalCreateVisible] = useState(false);
+    const [modalDetailVisible, setModalDetailVisible] = useState(false);
     const [updateData, setUpdateData] = useState({});
     const [product, setProduct] = useState();
     const [tableData, setTableData] = useState([]);
+    const [dataDetail, setDataDetail] = useState({});
 
     // ----------------------------------- API GET ALL GOLD --------------------------------
     async function loadAllGold(page, limit) {
@@ -156,6 +159,21 @@ const BasicTable = () => {
 
     const handleCancelCreateModal = () => {
         setModalCreateVisible(false);
+    }
+
+    // --------------------- HANDLE OPEN DETAIL GOLD ----------------------------
+    const handleOpenDetailModal = (GoldID) => {
+        const dataDetail = data.find((item) => item.GoldID === GoldID);
+        setDataDetail(dataDetail)
+        handleDetailModal();
+    }
+
+    const handleDetailModal = () => {
+        setModalDetailVisible(true);
+    }
+
+    const handleCancelDetailModal = () => {
+        setModalDetailVisible(false);
     }
 
     // --------------------- HANDLE OPEN UPDATE GOLD ----------------------------
@@ -393,7 +411,7 @@ const BasicTable = () => {
         {
             title: 'Giá',
             dataIndex: 'GoldPrice',
-            render: (GoldPrice) => numberToVND(GoldPrice)
+            render: (GoldPrice) => GoldPrice != null ? numberToVND(GoldPrice) : 'N/A',
         },
         //button edit
         {
@@ -401,7 +419,11 @@ const BasicTable = () => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button onClick={(e) => handleGetGoldByID(record.GoldID)}>EDIT PRICE</Button>
+                    <Button onClick={(e) => {
+                        e.stopPropagation();
+                        handleGetGoldByID(record.GoldID)
+                    }
+                    }>EDIT PRICE</Button>
                 </Space >
             ),
         },
@@ -441,12 +463,29 @@ const BasicTable = () => {
                         />
 
 
-                        <div className="table-container"><Table columns={columns} dataSource={tableData} onChange={onChange} /></div>
+                        <div className="table-container">
+                            <Table columns={columns} dataSource={tableData} onChange={onChange}
+                                onRow={(record) => {
+                                    return {
+                                        onClick: (e) => handleOpenDetailModal(record.GoldID),
+                                    }
+
+                                }}
+                                pagination={{ pageSize: 10 }}
+
+                            /></div>
 
                         <GoldCreateModal
                             visible={modalCreateVisible}
                             onCreate={handleCreateModal}
                             onCancel={handleCancelCreateModal}
+                        />
+
+                        <GoldDetailModal
+                            visible={modalDetailVisible}
+                            onCreate={handleDetailModal}
+                            onCancel={handleCancelDetailModal}
+                            dataDetail={dataDetail}
                         />
 
                         <EditModal

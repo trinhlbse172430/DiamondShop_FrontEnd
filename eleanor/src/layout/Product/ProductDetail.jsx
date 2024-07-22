@@ -388,10 +388,23 @@ const ProductDetail = () => {
                             </Box>
                         </Grid>
                         <Grid item="true" xl={7} lg={7} className="details-infor">
-                            <Typography variant="h1" className="product-title">
+                            {/* <Typography variant="h1" className="product-title">
                                 Price: {product && numberToVND(totalPrice)}
-                            </Typography>
+                            </Typography> */}
                             <div className="product-infor" style={{ paddingTop: '20px' }}>
+
+                                <Grid container spacing={2}>
+                                    <Grid item="true" xs={6}>
+                                        <Typography variant="h1" className="product-title">
+                                            Price:
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item="true" xs={3}>
+                                        {goldType && (
+                                            <p style={{ color: '#e8be6f', important: 'true' }}><strong>{product && numberToVND(totalPrice)}</strong></p>
+                                        )}
+                                    </Grid>
+                                </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item="true" xs={6}>
                                         <p style={{ color: '#fff', important: 'true' }}><strong>Chất liệu:</strong></p>
