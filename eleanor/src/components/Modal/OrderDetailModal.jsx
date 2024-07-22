@@ -4,6 +4,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Modal, Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words'
 import moment from 'moment';
+import axios from 'axios';
 
 
 const numberToVND = (number) => {
@@ -20,14 +21,30 @@ const numberToVND = (number) => {
 
 const OrderDetailModal = ({ visible, onCancel, orderDetailList }) => {
 
+    const [data, setData] = useState([]);
 
-    const loadAllOrderDetails = () => {
 
+    const loadWarrantie = async () => {
+        try {
+            const response = await axios.get('/warrantie');
+            //add warrantie to orderDetailList
+            orderDetailList.forEach(orderDetail => {
+                let warrantie = response.data.find(warrantie => warrantie.OrderDetailID === orderDetail.OrderDetailID);
+                orderDetail.warrantieID = warrantie.WarrantieID;
+                orderDetail.BeginWarrDate = warrantie.BeginWarrDate;
+                orderDetail.EndWarrDate = warrantie.EndWarrDate;
+                orderDetail.WarrNote = warrantie.WarrNote;
+            });
+            setData(orderDetailList);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     useEffect(() => {
-        console.log(orderDetailList);
-    }, []);
+        // console.log(orderDetailList);
+        loadWarrantie();
+    }, [visible]);
 
     // --------------------- ANT TABLE -----------------------------
     const [searchText, setSearchText] = useState('');
@@ -155,7 +172,7 @@ const OrderDetailModal = ({ visible, onCancel, orderDetailList }) => {
             key: 'OrderDetailID',
             sorter: (a, b) => a.OrderDetailID.length - b.OrderDetailID.length,
             sortOrder: sortedInfo.columnKey === 'OrderDetailID' ? sortedInfo.order : null,
-            width: '8%'
+            width: '1%'
         },
         {
             title: 'ProductID',
@@ -166,7 +183,7 @@ const OrderDetailModal = ({ visible, onCancel, orderDetailList }) => {
             width: '8%'
         },
         {
-            title: 'Quantity',
+            title: 'Số lượng',
             dataIndex: 'Quantity',
             key: 'Quantity',
             ...getColumnSearchProps('Quantity'),
@@ -193,31 +210,51 @@ const OrderDetailModal = ({ visible, onCancel, orderDetailList }) => {
             width: '8%',
         },
         {
-            title: 'SalePrice',
+            title: 'Giá bán',
             dataIndex: 'SalePrice',
             key: 'SalePrice',
             sorter: (a, b) => a.SalePrice.length - b.SalePrice.length,
             sortOrder: sortedInfo.columnKey === 'SalePrice' ? sortedInfo.order : null,
             width: '8%',
             render: (SalePrice) => numberToVND(SalePrice)
+        },
+        // {
+        //     title: 'Ngày bắt đầu bảo hành',
+        //     dataIndex: 'BeginWarrDate',
+        //     key: 'BeginWarrDate',
+        //     width: '8%',
+        //     render: (BeginWarrDate) => moment(BeginWarrDate).format('DD/MM/YYYY')
+        // },
+        {
+            title: 'Hạn bảo hành',
+            dataIndex: 'EndWarrDate',
+            key: 'EndWarrDate',
+            width: '8%',
+            render: (EndWarrDate) => moment(EndWarrDate).format('DD/MM/YYYY')
+        },
+        {
+            title: 'Ghi chú bảo hành',
+            dataIndex: 'WarrNote',
+            key: 'WarrNote',
+            sorter: (a, b) => a.WarrNote.length - b.WarrNote.length,
+            sortOrder: sortedInfo.columnKey === 'WarrNote' ? sortedInfo.order : null,
+            width: '8%'
         }
     ];
 
     return (
         <Modal
             visible={visible}
-            title="Create Entry"
-            okText="Update"
-            cancelText="Cancel"
             onCancel={onCancel}
             width='60%'
+            footer={null}
         //onOk={}
         >
             <div style={{ backgroundColor: '#ffffff', overflowX: 'auto' }}>
 
 
                 <div className="table-container">
-                    <Table columns={columns} dataSource={orderDetailList} />
+                    <Table columns={columns} dataSource={data} pagination={false} />
                 </div>
 
             </div>

@@ -13,6 +13,7 @@ import CreateModal from "../../../components/Modal/OrderUpdateModal";
 import OrderDetailModal from "../../../components/Modal/OrderDetailModal";
 import { notification } from 'antd';
 import DateTimeFormat from "../../../components/Typography/DateTimeFormat";
+import dayjs from "dayjs";
 
 
 const numberToVND = (number) => {
@@ -104,7 +105,7 @@ const BasicTable = () => {
         loadAllOrder();
     };
 
-    // --------------------- HANDLE OPEN CREATE EMPLOYEE ----------------------------
+    // --------------------- HANDLE OPEN DEtail----------------------------
     const handleOpenModalOrderDetail = () => {
         setModalOrderDetailVisible(true);
     };
@@ -150,7 +151,6 @@ const BasicTable = () => {
     useEffect(() => {
         loadAllOrder();
         loadAllRole();
-
     }, []);
 
     useEffect(() => {
@@ -183,6 +183,8 @@ const BasicTable = () => {
             description: des,
         });
     };
+
+    //cútom modal
 
 
     // --------------------- ANT TABLE -----------------------------
@@ -304,76 +306,74 @@ const BasicTable = () => {
 
     const columns = [
         {
-            title: 'CusName',
+            title: 'Họ tên',
             dataIndex: 'CusName',
             ...getColumnSearchProps('CusName'),
             key: 'CusName',
-            sorter: (a, b) => a.CusName.length - b.CusName.length,
+            sorter: (a, b) => a.CusName.localeCompare(b.CusName),
             sortOrder: sortedInfo.columnKey === 'CusName' ? sortedInfo.order : null,
-            width: '8%'
+            width: '7%'
         },
         {
-            title: 'SaleDate',
+            title: 'Ngày bán',
             dataIndex: 'SaleDate',
             key: 'SaleDate',
             sorter: (a, b) => moment(a.SaleDate).unix() - moment(b.SaleDate).unix(),
             sortOrder: sortedInfo.columnKey === 'SaleDate' ? sortedInfo.order : null,
             render: (date) => new DateTimeFormat({ date: date }),
-            width: '8%'
+            width: '7%'
         },
         {
-            title: 'CusAddress',
+            title: 'Địa chỉ',
             dataIndex: 'CusAddress',
             key: 'CusAddress',
             ...getColumnSearchProps('CusAddress'),
             sorter: (a, b) => a.CusAddress.length - b.CusAddress.length,
             sortOrder: sortedInfo.columnKey === 'CusAddress' ? sortedInfo.order : null,
-            width: '8%'
+            width: '7%'
         },
         {
-            title: 'CusPhone',
+            title: 'SDT',
             dataIndex: 'CusPhone',
             ...getColumnSearchProps('CusPhone'),
             key: 'CusPhone',
             sorter: (a, b) => a.CusPhone.length - b.CusPhone.length,
             sortOrder: sortedInfo.columnKey === 'CusPhone' ? sortedInfo.order : null,
-            width: '8%'
+            width: '7%'
         },
 
         {
-            title: 'TotalDetailPrice',
+            title: 'Tạm tính',
             dataIndex: 'TotalDetailPrice',
             key: 'TotalDetailPrice',
             sorter: (a, b) => a.TotalDetailPrice.length - b.TotalDetailPrice.length,
             sortOrder: sortedInfo.columnKey === 'TotalDetailPrice' ? sortedInfo.order : null,
-            width: '8%',
+            width: '7%',
             render: (TotalDetailPrice) => numberToVND(TotalDetailPrice)
         },
         {
-            title: 'DiscountPrice',
+            title: 'Giảm giá',
             dataIndex: 'DiscountPrice',
             key: 'DiscountPrice',
             sorter: (a, b) => a.DiscountPrice.length - b.DiscountPrice.length,
             sortOrder: sortedInfo.columnKey === 'DiscountPrice' ? sortedInfo.order : null,
-            width: '8%',
+            width: '7%',
             render: (DiscountPrice) => numberToVND(DiscountPrice)
         },
         {
-            title: 'TotalPrice',
+            title: 'Tổng cộng',
             dataIndex: 'TotalPrice',
             key: 'TotalPrice',
             sorter: (a, b) => a.TotalPrice.length - b.TotalPrice.length,
             sortOrder: sortedInfo.columnKey === 'TotalPrice' ? sortedInfo.order : null,
-            width: '8%',
+            width: '7%',
             render: (TotalPrice) => numberToVND(TotalPrice)
         },
         {
-            title: 'OrderPoint',
+            title: 'Điểm',
             dataIndex: 'OrderPoint',
             key: 'OrderPoint',
-            sorter: (a, b) => a.OrderPoint.length - b.OrderPoint.length,
-            sortOrder: sortedInfo.columnKey === 'OrderPoint' ? sortedInfo.order : null,
-            width: '8%'
+            width: '7%'
         },
         // {
         //     title: 'ShipPrice',
@@ -381,16 +381,16 @@ const BasicTable = () => {
         //     key: 'ShipPrice',
         //     sorter: (a, b) => a.ShipPrice.length - b.ShipPrice.length,
         //     sortOrder: sortedInfo.columnKey === 'ShipPrice' ? sortedInfo.order : null,
-        //     width: '8%',
+        //     width: '7%',
         //     render: (ShipPrice) => numberToVND(ShipPrice)
         // },
         {
-            title: 'Employee Delivery',
+            title: 'Nhân viên giao hàng',
             dataIndex: 'EmployeeIDShip',
             key: 'EmployeeIDShip',
-            sorter: (a, b) => a.EmployeeIDShip.length - b.EmployeeIDShip.length,
+            sorter: (a, b) => a.EmployeeIDShip.localeCompare(b.EmployeeIDShip),
             sortOrder: sortedInfo.columnKey === 'EmployeeIDShip' ? sortedInfo.order : null,
-            width: '8%',
+            width: '7%',
             render: (text, record) => {
                 const employee = deliveryEmployeeList.find((employee) => employee.EmployeeID === record.EmployeeIDShip);
                 if (employee) {
@@ -404,17 +404,15 @@ const BasicTable = () => {
             }
         },
         {
-            title: 'OrdNote',
+            title: 'Ghi chú',
             dataIndex: 'OrdNote',
             key: 'OrdNote',
-            sorter: (a, b) => a.OrdNote.length - b.OrdNote.length,
-            sortOrder: sortedInfo.columnKey === 'OrdNote' ? sortedInfo.order : null,
-            width: '8%'
+            width: '7%'
         },
         {
-            title: 'OrdStatus',
+            title: 'Tình trạng',
             dataIndex: 'OrdStatus',
-            width: '8%',
+            width: '7%',
             render: (OrdStatus) => (
                 <span>
                     {
@@ -454,9 +452,16 @@ const BasicTable = () => {
             ],
             onFilter: (value, record) => record.OrdStatus === value,
         },
+        // {
+        //     title: 'Tình trạng',
+        //     dataIndex: 'OrdStatus',
+        //     width: '7%',
+        //     sorter: (a, b) => a.OrdStatus - b.OrdStatus,
+        //     sortOrder: sortedInfo.columnKey === 'OrdStatus' ? sortedInfo.order : null,
+        // },
         //button edit
         {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
@@ -466,7 +471,7 @@ const BasicTable = () => {
                     }}>Chỉnh sửa</Button>
                 </Space>
             ),
-            width: '8%'
+            width: '7%'
         },
     ];
 
@@ -494,6 +499,7 @@ const BasicTable = () => {
                                     }
 
                                 }}
+                                pagination={{ pageSize: 10 }}
                             />
                         </div>
 
@@ -511,6 +517,7 @@ const BasicTable = () => {
                             onCancel={handleCancelOrderDetailModal}
                             orderDetailList={orderDetailList}
                             width={1000}
+                            footer={null}
                         />
 
                     </>

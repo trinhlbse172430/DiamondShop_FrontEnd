@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Select, Button, Input, DatePicker, InputNumber } from 'antd';
 import moment from 'moment';
 import axios from "axios";
+import { notification } from 'antd';
+import { Rating } from '@mui/material';
+import { Input as MuiInput } from "@mui/material";
+
+
 
 const { Option } = Select;
 
@@ -17,6 +22,8 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
     const [smallDiamondQuantity, setSmallDiamondQuantity] = useState(0);
     const [wagePrice, setWagePrice] = useState(0);
     const [productName, setProductName] = useState("");
+    const [image, setImage] = useState(null);
+    const [ration, setRation] = useState(100);
 
     const loadGoldList = async () => {
         try {
@@ -54,6 +61,14 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
         }
     };
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+        console.log("Kiểm tra image: ", e.target.files);
+    };
+
+    useEffect(() => {
+        console.log('img: ', image)
+    }, [image])
 
     useEffect(() => {
         if (visible) {
@@ -61,8 +76,11 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
             setGoldId(null);
             setDiamondId(null);
             setSmallDiamondId(null);
+            setProductName("");
             setSmallDiamondQuantity(1);
             setWagePrice(1);
+            setRation(100);
+            setImage(null);
         }
     }, [visible]);
 
@@ -78,8 +96,40 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
     //     console.log('smallDiamondID: ', smallDiamondId)
     // }, [proTypeId, goldId, diamondId, smallDiamondId, smallDiamondQuantity, wagePrice]);
 
+    const handleUpLoadImage = async () => {
+        try {
+            if (image) {
+                const formData = new FormData();
+                formData.append("image", image);
+                const response = await axios.post(
+                    `/product/upload`,
+                    formData
+                );
+                const maxSize = 1024 * 1024;
+                if (image.size > maxSize) {
+                    openNotificationWithIcon('error', 'Error: Image size must be less than 1MB');
+                } else {
+                    // console.log("Response data:", response.data.image);
+                    const imagePath = response.data.image;
 
-    const handleCreateProduct = () => {
+                    if (imagePath) {
+                        // console.log("Đã tải ảnh lên:", imagePath);
+                        handleCreateProduct(imagePath);
+                    } else {
+                        // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+                        openNotificationWithIcon('error', 'Error: No image path after upload');
+                    }
+                }
+            } else {
+                // console.log("Vui lòng chọn ảnh trước khi tải lên.");
+                openNotificationWithIcon('error', 'Error: Please select an image before uploading');
+            }
+        } catch (error) {
+            console.error("Lỗi khi tải ảnh lên:", error);
+        }
+    };
+
+    const handleCreateProduct = (productImage) => {
         //check all input
         if (!proTypeId || !goldId || !diamondId || !smallDiamondId || !smallDiamondQuantity || !wagePrice) {
             alert("Please fill all fields");
@@ -111,15 +161,26 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
                     DiaSmallQuantity: smallDiamondQuantity,
                     WagePrice: wagePrice.toString(),
                     Currency: "VND",
-                    ProductName: productName
+                    ProName: productName,
+                    Ration: ration,
+                    ProPicture: productImage,
                 }).then((response) => {
                     console.log(response);
+                    openNotificationWithIcon('success', 'Create product successfully');
                     onCreate();
                 });
             });
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type, des) => {
+        api[type]({
+            message: 'Notification Title',
+            description: des,
+        });
     };
 
 
@@ -130,8 +191,9 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
             okText="Create"
             cancelText="Cancel"
             onCancel={onCancel}
-            onOk={handleCreateProduct}
+            onOk={handleUpLoadImage}
         >
+            {contextHolder}
             <div style={{ marginBottom: 16 }}>
                 <label>ProType:</label>
                 {proTypeList.length > 0 && (
@@ -151,7 +213,7 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
             </div>
             <div style={{ marginBottom: 16 }}>
                 <label>Product Name:</label>
-                <Input placeholder="Product Name" onChange={(e) => setProductName(e.target.value)} />
+                <Input placeholder="Product Name" value={productName} onChange={(e) => setProductName(e.target.value)} />
             </div>
             <div style={{ marginBottom: 16 }}>
                 <label>Gold:</label>
@@ -206,11 +268,31 @@ const ProductCreateModal = ({ visible, onCreate, onCancel }) => {
             </div>
             <div style={{ marginBottom: 16 }}>
                 <label>Small Diamond Quantity:</label>
-                <InputNumber style={{ width: '100%' }} min={1} max={20} defaultValue={1} onChange={(value) => setSmallDiamondQuantity(value)} />
+                <InputNumber style={{ width: '100%' }} min={1} max={100} defaultValue={1} onChange={(value) => setSmallDiamondQuantity(value)} />
             </div>
             <div style={{ marginBottom: 16 }}>
                 <label>Wage Price:</label>
                 <InputNumber style={{ width: '100%' }} min={1} defaultValue={1} onChange={(value) => setWagePrice(value)} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+                <label>Ration:</label>
+                <InputNumber style={{ width: '100%' }} min={1} max={100} defaultValue={100} onChange={(value) => setRation(value)} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+                <label>Product Image:</label>
+                <MuiInput
+                    type="file"
+                    inputProps={{ accept: "image/*" }}
+                    onChange={handleImageChange}
+                    style={{ marginBottom: "1rem" }}
+                />
+                {image && (
+                    <img
+                        src={URL.createObjectURL(image)}
+                        alt="Ảnh sản phẩm"
+                        style={{ maxWidth: "100%" }}
+                    />
+                )}
             </div>
         </Modal>
     );

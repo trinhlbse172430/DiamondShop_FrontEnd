@@ -9,7 +9,7 @@ import { Table, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words'
-import './Dashboard.css'
+// import './Dasboard.css'
 import moment from 'moment';
 import EmployeeUpdateModal from "../../../components/Modal/EmployeeUpdateModal";
 import EmployeeCreateModal from "../../../components/Modal/EmployeeCreateModal";
@@ -45,7 +45,10 @@ const BasicTable = () => {
                 `/employee`
             )
                 .then((data) => {
-                    setData(data.data);
+                    const id = context.auth.id;
+                    //get data except current user
+                    const filterData = data.data.filter((item) => item.EmployeeID !== id);
+                    setData(filterData);
                 })
         } catch (err) {
             console.log(err);
@@ -74,7 +77,6 @@ const BasicTable = () => {
             setEmployeeIdUpdate(id);
             const res = await axios.get(`/employee/${id}`);
             setUpdateData(res.data);
-            console.log(res.data);
         } catch (error) {
             console.log(error);
         }
@@ -238,7 +240,7 @@ const BasicTable = () => {
             width: '10%'
         },
         {
-            title: 'Full name',
+            title: 'Họ và tên',
             dataIndex: 'EmpName',
             ...getColumnSearchProps('EmpName'),
             key: 'EmpName',
@@ -246,18 +248,18 @@ const BasicTable = () => {
             sortOrder: sortedInfo.columnKey === 'EmpName' ? sortedInfo.order : null,
         },
         {
-            title: 'Address',
+            title: 'Địa chỉ',
             dataIndex: 'EmpAddress',
             ...getColumnSearchProps('EmpAddress'),
         },
         {
-            title: 'Phone',
+            title: 'SĐT',
             dataIndex: 'age',
             dataIndex: 'EmpPhone',
             ...getColumnSearchProps('EmpPhone'),
         },
         {
-            title: 'Birth',
+            title: 'Ngày sinh',
             dataIndex: 'EmpBirthDay',
             render: text => dayjs(text).format('DD-MM-YYYY'),
         },
@@ -270,7 +272,7 @@ const BasicTable = () => {
             sortOrder: sortedInfo.columnKey === 'EmpGmail' ? sortedInfo.order : null,
         },
         {
-            title: 'Role',
+            title: 'Chức vụ',
             dataIndex: 'EmpNote',
             render: (EmpNote, record) => {
                 const role = roleList.find(role => role.EmployeeID === record.EmployeeID);
@@ -312,9 +314,20 @@ const BasicTable = () => {
                 return role ? role.RoleName.indexOf(value) === 0 : false;
             },
         },
+        {
+            title: 'Tình trạng',
+            dataIndex: 'EmpStatus',
+            render: (EmpStatus) => {
+                if (EmpStatus === 2) {
+                    return <Tag color="red">Off</Tag>;
+                } else {
+                    return <Tag color="green">Working</Tag>;
+                }
+            }
+        },
         //button edit
         {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">

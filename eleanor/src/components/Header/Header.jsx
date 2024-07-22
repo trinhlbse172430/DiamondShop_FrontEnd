@@ -135,8 +135,9 @@ const Header = () => {
                         <div className="flex-col hide-for-medium flex-left">
                             <ul className="header-nav header-nav-main nav nav-left  nav-uppercase">
                                 <li className="html custom html_topbar_left">
-                                   
-                                 
+                                    Hệ thống showrooms
+                                    <br />CN HCM: 35 Trần Phú, Phường 4, quận 5, TP. HCM<br />
+                                    CN CT: 53 Trần Phú, Ninh Kiều, Cần Thơ
                                 </li>
                             </ul>
                         </div>
@@ -144,8 +145,8 @@ const Header = () => {
                         {/* Right Elements  */}
                         <div className="flex-col hide-for-medium flex-right">
                             <ul className="header-nav header-nav-main nav nav-right  nav-uppercase">
-                                <li className="html custom html_topbar_right"><PhoneFilled /> 0999 9999 99 - 9999
-                                    999 999</li>
+                                <li className="html custom html_topbar_right"><PhoneFilled /> 0933 1977 55 - 0877
+                                    056 688</li>
                                 <li className="cart-item has-icon" onClick={() => handleSetActiveToLocalstorage("menu-item-6")} >
                                     {role && role === "Customer" && (
                                         <a href="http://localhost:3000/cart" className="header-cart-link is-small"
@@ -422,7 +423,7 @@ const Header = () => {
                                         alt="Viên kim cương Icon"
                                         src="https://caohungdiamond.com/wp-content/uploads/2024/04/Vien-Kim-Cuong-icon.png"
                                         data-ll-status="loaded" />Dây chuyền kim cương</a></li>
-                                {/* <li id="menu-item-6471"
+                                <li id="menu-item-6471"
                                     className={`menu-item menu-item-type-post_type menu-item-object-page menu-item-6471 menu-item-design-default has-icon-left ${activeItem === "menu-item-6471" ? 'active' : ''}`}
                                     onClick={() => handleSetActiveToLocalstorage("menu-item-6471")}>
                                     <a href="/price-list" className="nav-top-link"><img
@@ -430,7 +431,7 @@ const Header = () => {
                                         alt="Viên kim cương Icon"
                                         src="https://caohungdiamond.com/wp-content/uploads/2024/04/Vien-Kim-Cuong-icon.png"
                                         data-ll-status="loaded" />Bảng giá kim cương</a>
-                                </li> */}
+                                </li>
                                 {/* <li id="menu-item-28272"
                                     className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-28272 menu-item-design-default">
                                     <a href="/blog" className="nav-top-link">Kiến thức trang sức</a>
