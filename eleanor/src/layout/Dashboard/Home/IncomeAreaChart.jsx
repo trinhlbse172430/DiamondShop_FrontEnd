@@ -7,6 +7,8 @@ import { useTheme } from '@mui/material/styles';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 
+import axios from 'axios';
+
 // chart options
 const areaChartOptions = {
     chart: {
@@ -37,6 +39,69 @@ export default function IncomeAreaChart({ slot }) {
     const line = theme.palette.divider;
 
     const [options, setOptions] = useState(areaChartOptions);
+
+    const [orderData, setOrderData] = useState([]);
+    const [incomeByMonth, setIncomeByMonth] = useState([]);
+    const [incomeByWeek, setIncomeByWeek] = useState([]);
+    const [numberOrderByMonth, setNumberOrderByMonth] = useState([]);
+    const [numberOrderByWeek, setNumberOrderByWeek] = useState([]);
+
+    const loadOrder = async () => {
+        try {
+            const response = await axios.get(`/order`);
+            setOrderData(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        loadOrder();
+    }, []);
+
+    const loadIncomeByMonth = () => {
+        const incomeByMonth = Array(12).fill(0);
+        orderData.forEach((order) => {
+            const month = new Date(order.SaleDate).getMonth();
+            incomeByMonth[month] += Number(order.TotalPrice);
+            setIncomeByMonth(incomeByMonth);
+        });
+    }
+
+    const loadIncomeByWeek = () => {
+        const incomeByWeek = Array(7).fill(0);
+        orderData.forEach((order) => {
+            const day = new Date(order.SaleDate).getDay();
+            incomeByWeek[day] += Number(order.TotalPrice);
+            setIncomeByWeek(incomeByWeek);
+        });
+    }
+
+    const loadNumberOrderByMonth = () => {
+        const numberOrderByMonth = Array(12).fill(0);
+        orderData.forEach((order) => {
+            const month = new Date(order.SaleDate).getMonth();
+            numberOrderByMonth[month] += 1;
+            setNumberOrderByMonth(numberOrderByMonth);
+        });
+    }
+
+    const loadNumberOrderByWeek = () => {
+        const numberOrderByWeek = Array(7).fill(0);
+        orderData.forEach((order) => {
+            const day = new Date(order.SaleDate).getDay();
+            numberOrderByWeek[day] += 1;
+            setNumberOrderByWeek(numberOrderByWeek);
+        });
+    }
+
+    useEffect(() => {
+        loadIncomeByMonth();
+        loadIncomeByWeek();
+        loadNumberOrderByMonth();
+        loadNumberOrderByWeek();
+    }, [orderData]);
+
 
     useEffect(() => {
         setOptions((prevState) => ({
@@ -95,15 +160,17 @@ export default function IncomeAreaChart({ slot }) {
         }
     ]);
 
+
+
     useEffect(() => {
         setSeries([
             {
-                name: 'Page Views',
-                data: slot === 'month' ? [76, 85, 101, 98, 87, 105, 91, 114, 94, 86, 115, 35] : [31, 40, 28, 51, 42, 109, 100]
+                name: 'Income',
+                data: slot === 'month' ? incomeByMonth : incomeByWeek
             },
             {
-                name: 'Sessions',
-                data: slot === 'month' ? [110, 60, 150, 35, 60, 36, 26, 45, 65, 52, 53, 41] : [11, 32, 45, 32, 34, 52, 41]
+                name: 'Orders',
+                data: slot === 'month' ? numberOrderByMonth : numberOrderByWeek
             }
         ]);
     }, [slot]);

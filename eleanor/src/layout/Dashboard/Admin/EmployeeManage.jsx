@@ -9,7 +9,7 @@ import { Table, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import Highlighter from 'react-highlight-words'
-// import './Dasboard.css'
+import './Dasboard.css'
 import moment from 'moment';
 import EmployeeUpdateModal from "../../../components/Modal/EmployeeUpdateModal";
 import EmployeeCreateModal from "../../../components/Modal/EmployeeCreateModal";

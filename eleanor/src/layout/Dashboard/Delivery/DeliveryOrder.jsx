@@ -26,6 +26,7 @@ const numberToVND = (number) => {
 
 const BasicTable = () => {
     const context = useAuth();
+    const { auth } = context;
 
     const [data, setData] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +37,7 @@ const BasicTable = () => {
     const [roleList, setRoleList] = useState([]);
     const [EmployeeID, setEmployeeID] = useState('');
 
-    const { auth } = context;
+
 
     useEffect(() => {
         if (auth) {
@@ -227,6 +228,11 @@ const BasicTable = () => {
             ),
     });
 
+    const handleLoadPage = () => {
+        //reload page
+        window.location.reload();
+    }
+
     const columns = [
         // {
         //     title: 'CusName',
@@ -335,6 +341,7 @@ const BasicTable = () => {
                 <h1>BẠN KHÔNG CÓ QUYỀN SỬ DỤNG CHỨC NĂNG NÀY</h1>
             ) : (
                 <>
+                    <Button type="primary" onClick={handleLoadPage} style={{ marginBottom: 16 }}>Load Order</Button>
                     {contextHolder}
                     <div className="table-container">
                         <Table
