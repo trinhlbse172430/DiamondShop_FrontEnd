@@ -13,6 +13,7 @@ import DiamondCreateModal from "../../../components/Modal/DiamondCreateModal";
 import { Modal } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { notification } from 'antd';
+import DiamondDetailModal from "../../../components/Modal/DiamondDetailModal";
 
 const numberToVND = (number) => {
     //check if number is string
@@ -86,12 +87,14 @@ const BasicTable = () => {
     const [diaOrigin, setDiaOrigin] = useState([]);
     const [diaColor, setDiaColor] = useState([]);
     const [modalCreateVisible, setModalCreateVisible] = useState(false);
+    const [modalDetailVisible, setModalDetailVisible] = useState(false);
     const [diaClarity, setDiaClarity] = useState([]);
     const [product, setProduct] = useState([]);
     const [diaPriceList, setDiaPriceList] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [modalEditVisible, setModalEditVisible] = useState(false);
     const [dataEdit, setDataEdit] = useState([]);
+    const [dataDetail, setDataDetail] = useState([]);
 
     // ----------------------------------- API GET ALL DIAMOND --------------------------------
     async function loadAllDiamond(page, limit) {
@@ -201,6 +204,23 @@ const BasicTable = () => {
     const handleCancelCreateModal = () => {
         setModalCreateVisible(false);
     }
+
+    // --------------------- HANDLE OPEN DETAIL DIAMOND ----------------------------
+    const handleOpenDetailModal = () => {
+        setModalDetailVisible(true);
+    };
+
+    const handleCancelDetailModal = () => {
+        setModalDetailVisible(false);
+    }
+
+    const handleGetDiamondDetailById = async (DiaID) => {
+        const dataDetail = data.find((item) => item.DiamondID === DiaID);
+        setDataDetail(dataDetail);
+        handleOpenDetailModal();
+    }
+
+
 
     // --------------------- HANDLE OPEN EDIT PRICE ----------------------------
     const handleOpenEditModal = () => {
@@ -496,7 +516,10 @@ const BasicTable = () => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button onClick={(e) => handleGetDiamondById(record.DiamondID)}>EDIT PRICE</Button>
+                    <Button onClick={(e) => {
+                        e.stopPropagation();
+                        handleGetDiamondById(record.DiamondID)
+                    }}>EDIT PRICE</Button>
                 </Space>
             ),
         },
@@ -537,7 +560,14 @@ const BasicTable = () => {
                             startIcon={<AddCircleOutlineIcon />}
                         />
 
-                        <Table columns={columns} dataSource={tableData} onChange={onChange} />
+                        <Table columns={columns} dataSource={tableData} onChange={onChange}
+                            onRow={(record) => {
+                                return {
+                                    onClick: (e) => handleGetDiamondDetailById(record.DiamondID),
+                                }
+
+                            }}
+                        />
 
                         <DiamondCreateModal
                             visible={modalCreateVisible}
@@ -545,6 +575,12 @@ const BasicTable = () => {
                             onCancel={handleCancelCreateModal}
                             DiaOriginList={diaOrigin}
                             DiaColorList={diaColor}
+                        />
+
+                        <DiamondDetailModal
+                            visible={modalDetailVisible}
+                            onCancel={handleCancelDetailModal}
+                            dataDetail={dataDetail}
                         />
 
                         <EditModal
