@@ -7,13 +7,15 @@ import { notification } from 'antd';
 const { Option } = Select;
 
 const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
-    const [DiaOriginID, setDiaOriginID] = useState(null); const [DiaColorID, setDiaColorID] = useState(null);
+    const [DiaOriginID, setDiaOriginID] = useState(null);
+    const [DiaColorID, setDiaColorID] = useState(null);
     const [DiaWeight, setDiaWeight] = useState(1);
     const [DiaClarityID, setDiaClarityID] = useState(null);
     const [DiaOriginList, setDiaOriginList] = useState([]);
     const [DiaColorList, setDiaColorList] = useState([]);
     const [DiaClarityList, setDiaClarityList] = useState([]);
     const [DiaCut, setDiaCut] = useState('Round');
+    const [DiaPrice, setDiaPrice] = useState(100000);
 
     useEffect(() => {
         if (visible) {
@@ -60,12 +62,16 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
 
     const handleCreateDiamond = async () => {
         //check if all fields are filled
-        if (!DiaOriginID || !DiaColorID || !DiaClarityID || !DiaWeight) {
+        if (!DiaOriginID || !DiaColorID || !DiaClarityID || !DiaWeight || !DiaCut || !DiaPrice) {
             openNotificationWithIcon('error', 'Please fill all fields');
             return;
         }
         //check DiaID existed else continue
-        const DiaID = DiaOriginID + DiaColorID + DiaClarityID
+        let weight = DiaWeight.toString();
+        if (weight.length === 1) {
+            weight = '0' + weight;
+        }
+        const DiaID = DiaOriginID + DiaColorID + DiaClarityID + weight;
         try {
             const response = await axios.get(`/diamond`);
             const list = response.data;
@@ -82,6 +88,7 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
         }
 
         //create diamond
+        const GIAID = "GIA" + Date.now().toString(36).slice(-4);
         try {
             axios.post(`/diamond`, {
                 DiamondID: DiaID,
@@ -91,8 +98,9 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
                 DiaWeight,
                 DiaPicture: 'picture',
                 DiaUnit: 'Ly',
-                GIAID: 'GIA001',
-                DiaCut: DiaCut
+                DiaCut: DiaCut,
+                GIAID: GIAID,
+                GIAPicture: 'https://caohungdiamond.com/wp-content/uploads/2023/06/bang-gia-kim-cuong-xac-nhan-GIA.jpg'
             }).then((response) => {
                 openNotificationWithIcon('success', 'Create diamond successfully');
                 console.log(response);
@@ -101,6 +109,25 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
         } catch (error) {
             console.log(error);
         }
+        try {
+            axios.post(`/dia_price`, {
+                DiaPriceID: DiaID,
+                DiaInputDate: moment().format('YYYY-MM-DD'),
+                DiaOriginID,
+                DiaWeight,
+                DiaUnit: 'Ly',
+                DiaColorID,
+                DiaClarityID,
+                DiaPrice: DiaPrice,
+                Currency: 'VND'
+            }).then((response) => {
+                console.log(response);
+            }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
 
@@ -117,7 +144,7 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
     return (
         <Modal
             visible={visible}
-            title="Create Gold"
+            title="Create Diamond"
             okText="Create"
             cancelText="Cancel"
             onCancel={onCancel}
@@ -178,6 +205,10 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
             <div style={{ marginBottom: 16 }}>
                 <label>Diamond Weight:</label>
                 <InputNumber style={{ width: '100%' }} min={1} max={20} defaultValue={1} onChange={(value) => setDiaWeight(value)} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+                <label>Diamond Price:</label>
+                <InputNumber style={{ width: '100%' }} min={1} max={1000000000} defaultValue={100000} onChange={(value) => setDiaPrice(value)} />
             </div>
             <div style={{ marginBottom: 16 }}>
                 <label>Diamond Cut:</label>

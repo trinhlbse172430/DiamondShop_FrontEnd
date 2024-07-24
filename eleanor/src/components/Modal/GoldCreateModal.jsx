@@ -69,9 +69,14 @@ const GoldCreateModal = ({ visible, onCreate, onCancel }) => {
         }
 
         //create gold
+        let weight = GoldWeight.toString();
+        //if number 1 -> 01
+        if (weight.length === 1) {
+            weight = '0' + weight;
+        }
         try {
             axios.post(`/gold`, {
-                GoldID: GoldTypeID + GoldAgeID,
+                GoldID: GoldTypeID + GoldAgeID + weight,
                 GoldTypeID,
                 GoldAgeID,
                 GoldWeight,

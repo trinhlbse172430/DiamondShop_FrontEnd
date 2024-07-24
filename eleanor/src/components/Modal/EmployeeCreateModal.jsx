@@ -3,6 +3,7 @@ import { Modal, Select, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
 import axios from "axios";
 import dayjs from 'dayjs';
+import { notification } from 'antd';
 
 const { Option } = Select;
 
@@ -53,10 +54,28 @@ const EmployeeCreateModal = ({ visible, onCreate, onCancel, empData, roleList })
                     }
                 }
                 setRoleId(RoleID);
+                let functionID = 1;
+                switch (roleName) {
+                    case "Admin":
+                        functionID = 1;
+                        break;
+                    case "Manager":
+                        functionID = 2;
+                        break;
+                    case "Sale":
+                        functionID = 3;
+                        break;
+                    case "Delivery":
+                        functionID = 4;
+                        break;
+                    default:
+                        functionID = 1;
+                        break;
+                }
                 axios.post(`/role`, {
                     RoleID: RoleID,
                     RoleName: roleName,
-                    FunctionID: 1,
+                    FunctionID: functionID,
                     EmployeeID: employeeId
                 }).then((response) => {
                     console.log(response);
@@ -123,6 +142,20 @@ const EmployeeCreateModal = ({ visible, onCreate, onCancel, empData, roleList })
         }
     }, [empData]);
 
+    const disabledDate = (current) => {
+        // Disable dates after today (future dates)
+        return current && current > dayjs().endOf('day');
+    };
+
+    //ant notify
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type, des) => {
+        api[type]({
+            message: 'Notification Title',
+            description: des,
+        });
+    };
+
     return (
         <Modal
             visible={visible}
@@ -132,6 +165,7 @@ const EmployeeCreateModal = ({ visible, onCreate, onCancel, empData, roleList })
             onCancel={onCancel}
             onOk={handleCreateEmployee}
         >
+            {contextHolder}
             <div style={{ marginBottom: 16 }}>
                 <label>Name:</label>
                 <Input
@@ -195,6 +229,7 @@ const EmployeeCreateModal = ({ visible, onCreate, onCancel, empData, roleList })
                     placeholder="Select birthday"
                     value={birthday}
                     onChange={(date) => setBirthday(date ? dayjs(date) : null)}
+                    disabledDate={disabledDate} // Disable future dates
                 />
             </div>
             <div style={{ marginBottom: 16 }}>

@@ -120,7 +120,7 @@ const DiamondCreateModal = ({ visible, onCreate, onCancel }) => {
     return (
         <Modal
             visible={visible}
-            title="Create Gold"
+            title="Create Small Diamond"
             okText="Create"
             cancelText="Cancel"
             onCancel={onCancel}

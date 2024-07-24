@@ -13,6 +13,7 @@ import {
     TableBody,
     Button,
     IconButton,
+    Tab,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -24,6 +25,7 @@ import Footer from "../../components/Footer/Footer";
 import { Button as AntButton } from 'antd';
 import axios from "axios";
 import dayjs from "dayjs";
+import { InputNumber } from 'antd';
 
 const numberToVND = (number) => {
     //check if number is string
@@ -97,7 +99,8 @@ export default function Cart() {
     const totalCart = () => {
         let total = 0;
         cartList.map((product) => {
-            total += product.TotalPrice * product.Quantity;
+            // total += product.TotalPrice * product.Quantity * product.Ration / 100;
+            total += product.TotalPrice * product.Quantity
         });
         //check promotion
         if (promp !== 0) {
@@ -111,6 +114,11 @@ export default function Cart() {
     const handleIncreaseQuantity = (product) => {
         const newCart = cartList.map((item) => {
             if (item.ProductID === product.ProductID && item.GoldTypeID === product.GoldTypeID && item.DiaPriceID === product.DiaPriceID && item.DiaSmallPriceID === product.DiaSmallPriceID) {
+                if (item.Quantity === 20) {
+                    // openNotificationWithIcon('error', 'Số lượng sản phẩm đã đạt giới hạn tối đa');
+                    return item;
+                }
+
                 return { ...item, Quantity: item.Quantity + 1 };
             }
             return item;
@@ -150,6 +158,18 @@ export default function Cart() {
         localStorage.setItem("cart", JSON.stringify(newCart));
         loadCart();
     }
+
+    const handleChangeQuantity = (value, product) => {
+        const newCart = cartList.map((item) => {
+            if (item.ProductID === product.ProductID && item.GoldTypeID === product.GoldTypeID && item.DiaPriceID === product.DiaPriceID && item.DiaSmallPriceID === product.DiaSmallPriceID) {
+                return { ...item, Quantity: value };
+            }
+            return item;
+        })
+        setCartList(newCart);
+        localStorage.setItem("cart", JSON.stringify(newCart));
+        loadCart();
+    };
 
 
 
@@ -194,6 +214,7 @@ export default function Cart() {
                                         <TableCell className="product-name" colSpan={2} style={{ textAlign: 'center' }}>Sản phẩm</TableCell>
                                         <TableCell className="product-price">Giá</TableCell>
                                         <TableCell className="product-quantity">Số lượng</TableCell>
+                                        {/* <TableCell className="product-quantity">Tỉ lệ áp giá</TableCell> */}
                                         <TableCell className="product-subtotal">Tạm tính</TableCell>
                                         <TableCell className="product-remove"></TableCell>
                                     </TableRow>
@@ -202,15 +223,14 @@ export default function Cart() {
                                             {/* <TableRow className="cart_item"> */}
                                             <TableCell className="product-thumbnail" sx={{ paddingLeft: '16px !important' }}>
                                                 <img
-                                                    src={'https://caohungdiamond.com/wp-content/uploads/2023/11/vt0159-3-510x510.jpg'}
+                                                    src={product.ProPicture}
                                                     // alt={product.productId.productName}
                                                     className="attachment-shop_thumbnail size-shop_thumbnail wp-post-image"
                                                 />
                                             </TableCell>
                                             <TableCell className="product-name" data-title="Product">
                                                 <Typography variant="body1">
-                                                    {/* {product.productId.productName} */}
-                                                    {product.ProTypeID + " " + product.GoldPriceID + " " + product.DiaPriceID + "(" + product.CusSize + ")"}
+                                                    {product.ProName}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell
@@ -235,17 +255,18 @@ export default function Cart() {
                                                             >
                                                                 <RemoveIcon />
                                                             </IconButton>
-                                                            <input
-                                                                type="text"
-                                                                data-step="1"
-                                                                data-min="0"
+                                                            {/* <input
+                                                                type="number"
+                                                                min="1"
+                                                                max="20"
                                                                 value={product.Quantity}
                                                                 title="Qty"
                                                                 className="input-quantity"
                                                                 size="4"
-                                                                style={{ height: '30px', marginLeft: '5px', marginRight: '5px' }} // Adjust margin as needed
-                                                                onChange={(e) => { }}
-                                                            />
+                                                                style={{ height: '30px', marginLeft: '5px', marginRight: '5px' }}
+                                                            // onChange={(e) => handleChangeQuantity(e, product)}
+                                                            /> */}
+                                                            <InputNumber min={1} max={20} value={product.Quantity} onChange={(value) => handleChangeQuantity(value, product)} />
                                                             <IconButton
                                                                 aria-label="increase quantity"
                                                                 onClick={() => handleIncreaseQuantity(product)}
@@ -258,11 +279,18 @@ export default function Cart() {
                                                     </Box>
                                                 </div>
                                             </TableCell>
+                                            {/* <TableCell className="product-subtotal"
+                                                data-title="Subtotal">
+                                                <Typography variant="body1">
+                                                    {product.Ration}
+                                                </Typography>
+                                            </TableCell> */}
                                             <TableCell
                                                 className="product-subtotal"
                                                 data-title="Subtotal"
                                             >
                                                 <span className="woocommerce-Price-currencySymbol">
+                                                    {/* {numberToVND(product.TotalPrice * product.Quantity * product.Ration / 100)} */}
                                                     {numberToVND(product.TotalPrice * product.Quantity)}
                                                 </span>
                                             </TableCell>
@@ -298,7 +326,7 @@ export default function Cart() {
                                                     <Typography variant="h3" style={{ color: '#ffffff' }}>Tổng:</Typography>
                                                     {promp !== 0 ? (
                                                         <Typography variant="h3" className="total-price" style={{ textDecoration: 'line-through', color: '#ffffff' }}>
-                                                            {numberToVND(total + (total * promp / 100))}
+                                                            {numberToVND(total * 100 / (100 - promp))}
                                                         </Typography>
                                                     ) : null}
                                                     <Typography variant="h3" style={{ color: '#ffa733' }}>{numberToVND(total)}</Typography>
