@@ -7,7 +7,7 @@ import { notification } from 'antd';
 
 const { Option } = Select;
 
-const PromotionCreateModal = ({ visible, onCreate, onCancel }) => {
+const PromotionUpdateModal = ({ visible, onCreate, onCancel, data }) => {
     const [promName, setPromName] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -15,43 +15,38 @@ const PromotionCreateModal = ({ visible, onCreate, onCancel }) => {
 
     useEffect(() => {
         if (visible) {
-            setPromName('');
-            setStartDate(null);
-            setEndDate(null);
-            setPromPercent(1);
+            setPromName(data.PromotionName);
+            setStartDate(data.PromStartDate ? dayjs(data.PromStartDate) : null);
+            setEndDate(data.PromEndDate ? dayjs(data.PromEndDate) : null);
+            setPromPercent(data.PromPercent);
         }
     }, [visible]);
 
-    //handle create promotion
-    const handleCreatePromotion = async () => {
-        //check all field
+    //handle update promotion
+    const handleUpdatePromotion = () => {
         if (!promName || !startDate || !endDate || !PromPercent) {
             openNotificationWithIcon('error', 'Please fill all fields');
             return;
         }
-        //check enddate > startdate
-        if (endDate < startDate) {
-            openNotificationWithIcon('error', 'End date must be greater than start date');
+        if (startDate >= endDate) {
+            openNotificationWithIcon('error', 'Start date must be before end date');
             return;
         }
-        const promotionID = "PRO" + Date.now().toString(36).slice(-4);
-        try {
-            const response = await axios.post(`/promotion`, {
-                PromotionID: promotionID,
-                PromotionName: promName,
-                PromStartDate: startDate,
-                PromEndDate: endDate,
-                PromPercent: PromPercent,
-            });
-            if (response) {
-                openNotificationWithIcon('success', 'Create promotion successfully');
+        axios.put(`/promotion/${data.PromotionID}`, {
+            PromotionName: promName,
+            PromStartDate: startDate.format('YYYY-MM-DD'),
+            PromEndDate: endDate.format('YYYY-MM-DD'),
+            PromPercent: PromPercent
+        })
+            .then((res) => {
+                openNotificationWithIcon('success', 'Update promotion successfully');
                 onCreate();
-            }
-        } catch (error) {
-            openNotificationWithIcon('error', 'Create promotion failed');
-            console.error(error);
-        }
-    };
+            })
+            .catch((err) => {
+                openNotificationWithIcon('error', 'Update promotion failed');
+            });
+    }
+
 
 
     //ant notify
@@ -66,11 +61,11 @@ const PromotionCreateModal = ({ visible, onCreate, onCancel }) => {
     return (
         <Modal
             visible={visible}
-            title="Create Promotion"
-            okText="Create"
+            title="Create employee"
+            okText="Update"
             cancelText="Cancel"
             onCancel={onCancel}
-            onOk={handleCreatePromotion}
+            onOk={handleUpdatePromotion}
         >
             {contextHolder}
             <div style={{ marginBottom: 16 }}>
@@ -107,4 +102,4 @@ const PromotionCreateModal = ({ visible, onCreate, onCancel }) => {
     );
 };
 
-export default PromotionCreateModal;
+export default PromotionUpdateModal;

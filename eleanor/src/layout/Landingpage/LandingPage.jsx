@@ -6,7 +6,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Card } from 'antd'
-import '../../components/Header/style.css';
+import '../../components/Header/styles.css';
 import Banner from '../../image/banner2.jpg'
 import SmallBanner from '../../image/smallBanner.png'
 import { useEffect, useState } from "react";

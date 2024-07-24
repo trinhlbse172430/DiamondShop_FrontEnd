@@ -3,11 +3,12 @@ import { Modal, Select, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
 import axios from "axios";
 import dayjs from 'dayjs';
+import { notification } from 'antd';
 
 const { Option } = Select;
 
 const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList }) => {
-    const [status, setStatus] = useState(1);
+    const [status, setStatus] = useState('');
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [empPhone, setEmpPhone] = useState('');
@@ -21,6 +22,13 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
     const [roleFunction, setRoleFunction] = useState(1);
 
     const handleUpdateEmployee = () => {
+        let statusNumber = 1;
+        if (status === "off") {
+            statusNumber = 2;
+        }
+        else {
+            statusNumber = 1;
+        }
         try {
             axios.put(`/employee/${empData.EmployeeID}`, {
                 EmpName: name,
@@ -30,7 +38,8 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
                 EmpGmail: gmail,
                 EmpNote: note,
                 EmpPassword: password,
-                EmpBirthDay: birthday
+                EmpBirthDay: birthday,
+                EmpStatus: statusNumber,
             }).then((response) => {
                 onCreate();
             });
@@ -48,6 +57,8 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
         } catch (error) {
             console.log(error);
         }
+
+        openNotificationWithIcon('success', 'Update employee successfully');
 
     };
 
@@ -75,6 +86,27 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
         }
     };
 
+    const handleUpdateFunction = (roleName) => {
+        setRoleName(roleName);
+        switch (roleName) {
+            case "Admin":
+                setRoleFunction(1);
+                break;
+            case "Manager":
+                setRoleFunction(2);
+                break;
+            case "Sale":
+                setRoleFunction(3);
+                break;
+            case "Delivery":
+                setRoleFunction(4);
+                break;
+            default:
+                setRoleFunction(1);
+                break;
+        }
+    };
+
     // Load data into form when empData changes
     useEffect(() => {
         loadRoleId();
@@ -87,13 +119,23 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
             setNote(empData.EmpNote);
             setPassword(empData.EmpPassword);
             setBirthday(dayjs(empData.EmpBirthDay)); // Convert to moment object
+            console.log(empData.EmpStatus);
+            if (empData.EmpStatus === 2) {
+                setStatus("off");
+            } else {
+                setStatus("working");
+            }
         }
     }, [empData]);
 
-    //check roleID
-    // useEffect(() => {
-    //     console.log(roleId);
-    // }, [roleId]);
+    //ant notify
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type, des) => {
+        api[type]({
+            message: 'Notification Title',
+            description: des,
+        });
+    };
 
     return (
         <Modal
@@ -104,6 +146,7 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
             onCancel={onCancel}
             onOk={handleUpdateEmployee}
         >
+            {contextHolder}
             <div style={{ marginBottom: 16 }}>
                 <label>Name:</label>
                 <Input
@@ -169,34 +212,30 @@ const EmployeeUpdateModal = ({ visible, onCreate, onCancel, empData, roleList })
                     onChange={(date) => setBirthday(date ? dayjs(date) : null)}
                 />
             </div>
-            {/* <div style={{ marginBottom: 16 }}>
-                <label>Status:</label>
-                <Select
-                    style={{ width: '100%' }}
-                    placeholder="Select status"
-                    onChange={handleStatusChange}
-                    value={status}
-                >
-                    <Option value="1">Waiting</Option>
-                    <Option value="2">Confirm</Option>
-                    <Option value="3">Delivering</Option>
-                    <Option value="4">Cancelled</Option>
-                    <Option value="5">Complete</Option>
-                </Select>
-            </div> */}
-            {/* select role */}
             <div style={{ marginBottom: 16 }}>
                 <label>Role:</label>
                 <Select
                     style={{ width: '100%' }}
                     placeholder="Select role"
-                    onChange={(value) => setRoleName(value)}
+                    onChange={(value) => handleUpdateFunction(value)}
                     value={roleName}
                 >
                     <option value="Admin">Admin</option>
                     <option value="Manager">Manager</option>
                     <option value="Sale">Sale</option>
                     <option value="Delivery">Delivery</option>
+                </Select>
+            </div>
+            <div style={{ marginBottom: 16 }}>
+                <label>Status:</label>
+                <Select
+                    style={{ width: '100%' }}
+                    placeholder="Select role"
+                    value={status}
+                    onChange={(value) => setStatus(value)}
+                >
+                    <option value="working">Working</option>
+                    <option value="off">Off</option>
                 </Select>
             </div>
         </Modal>

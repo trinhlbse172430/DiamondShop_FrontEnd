@@ -105,7 +105,7 @@ const GoldDetailModal = ({ visible, onCreate, onCancel, dataDetail }) => {
     return (
         <Modal
             visible={visible}
-            title="Create Gold"
+            title="Gold Detail"
             okText="Create"
             cancelText="Cancel"
             onCancel={onCancel}
@@ -124,6 +124,16 @@ const GoldDetailModal = ({ visible, onCreate, onCancel, dataDetail }) => {
             </div>
             <div style={{ marginBottom: 16 }}>
                 <label>Gold Weight: {dataDetail.GoldWeight}</label>
+            </div>
+            <div style={{ marginBottom: 16 }}>
+                <label>Image:</label>
+
+                <img
+                    src={dataDetail.GoldPicture}
+                    alt="Ảnh sản phẩm"
+                    style={{ maxWidth: "100%" }}
+                />
+
             </div>
         </Modal>
     );

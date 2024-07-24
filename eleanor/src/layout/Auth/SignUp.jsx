@@ -35,6 +35,7 @@ export default function SignUp() {
         password: "",
         passwordConfirm: "",
         cusPoint: 0,
+        email: "",
     });
 
     const StyledNavLink = styled(NavLink)`text-decoration: none;`;
@@ -42,7 +43,6 @@ export default function SignUp() {
     //-----------------handle function-------------------
     //handle submit
     const handleSubmit = async (e) => {
-        console.log(data);
         e.preventDefault();
         //check empty 
         if (Object.values(data).some((item) => item === "")) {
@@ -65,9 +65,13 @@ export default function SignUp() {
                 CusPassword: data.password,
                 CusUsername: data.username,
                 CusPoint: data.cusPoint,
+                CusEmail: data.email,
             }).then((data) => {
                 openNotificationWithIcon('success', 'Đăng ký thành công');
-                navigate("/sign-in");
+                // delay 1 second
+                setTimeout(() => {
+                    navigate("/sign-in");
+                }, 1500);
             });
         } catch (error) {
             openNotificationWithIcon('error', 'Đăng ký thất bại');
@@ -148,6 +152,10 @@ export default function SignUp() {
                                 FullName
                             </Typography>
                             <Input placeholder="fullname" prefix={<UserOutlined />} onChange={(e) => setData({ ...data, fullname: e.target.value })} />
+                            <Typography component="h1" variant="h5" sx={{ color: '#ffffff' }}>
+                                Email
+                            </Typography>
+                            <Input placeholder="email" prefix={<UserOutlined />} onChange={(e) => setData({ ...data, email: e.target.value })} />
                             <Typography component="h1" variant="h5" sx={{ color: '#ffffff' }}>
                                 Phone
                             </Typography>

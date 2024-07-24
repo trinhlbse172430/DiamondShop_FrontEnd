@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './style.css';
+import './styles.css';
 import { MenuOutlined, ShoppingCartOutlined, DownOutlined, RightOutlined, SearchOutlined, PhoneFilled } from '@ant-design/icons';
 import SlideBarMenu from "../SlideBarMenu/SlideBarMenu";
 import useAuth from "../../hooks/useAuth";
@@ -203,194 +203,13 @@ const Header = () => {
                     <div className="flex-row container">
 
                         <div className="flex-col hide-for-medium flex-center">
-                            <ul className="nav header-nav header-bottom-nav nav-center  nav-uppercase">
+                            <ul className="nav header-nav header-bottom-nav nav-center  nav-uppercase nav-center">
                                 <li id="menu-item-6344"
                                     onClick={() => handleSetActiveToLocalstorage("menu-item-6344")}
                                     className={`menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-1840 current_page_item menu-item-6344 menu-item-design-default ${activeItem === "menu-item-6344" ? 'active' : ''}`}
                                 >
                                     <a href="/" aria-current="page" className="nav-top-link">HOME</a>
                                 </li>
-                                {/* <li id="menu-item-6346"
-                                    className={`menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-6346 menu-item-design-container-width menu-item-has-block has-dropdown has-icon-left ${isDropdownOpen1 ? 'current-dropdown' : ''}  ${activeItem === "menu-item-6346" ? 'active' : ''}`}
-                                    onMouseEnter={() => handleMouseEnter(1)} onMouseLeave={() => handleMouseLeave(1)} onClick={() => setActiveItem("menu-item-6346")}>
-                                    <a href="http://localhost:3000/product" className="nav-top-link"
-                                        aria-expanded={isDropdownOpen1 ? 'true' : 'false'} aria-haspopup="menu"><img className="ux-menu-icon entered lazyloaded"
-                                            width="25" height="25"
-                                            alt="Icon nhẫn kim cương"
-                                            src="https://caohungdiamond.com/wp-content/uploads/2022/06/nhan-nu.png"
-                                            data-ll-status="loaded" />Trang sức kim cương<DownOutlined /></a>
-                                    <div className="sub-menu nav-dropdown" style={{ top: '50px', right: '0', bottom: '0', left: '0px', width: '823px' }}>
-                                        <div className="row row-small" id="row-343878564">
-                                            <div id="col-153294758" className="col small-12 large-12">
-                                                <div className="col-inner">
-
-                                                    <div className="mega-menu" id="362-megamenu">
-                                                        <div className="row row-small">
-                                                            <div className="col large-3">
-                                                                <div className="col-inner">
-                                                                    <div className="menu-tab">
-
-                                                                        <a href="http://localhost:3000/product/nkc"
-                                                                            className={`tablinks tablinks-362 has-child ${activeTab === 363 ? 'active' : ''}`}
-                                                                            onMouseEnter={() => handleMouseOverTab(363)} >
-                                                                            <img src="https://caohungdiamond.com/wp-content/uploads/2022/06/nhan-nu.png"
-                                                                                alt="Nhẫn Kim Cương" />
-                                                                            <span className="cat-name">Nhẫn Kim Cương</span>
-                                                                        </a>
-                                                                        <a href="http://localhost:3000/product/bt"
-                                                                            className={`tablinks tablinks-362 has-child ${activeTab === 364 ? 'active' : ''}`}
-                                                                            onMouseEnter={() => handleMouseOverTab(364)} >
-                                                                            <img
-                                                                                alt="Bông Tai Kim Cương"
-                                                                                src="https://caohungdiamond.com/wp-content/uploads/2022/06/bong-tai.png" />
-                                                                            <span className="cat-name">Bông Tai Kim Cương</span>
-                                                                        </a>
-                                                                        <a href="http://localhost:3000/product/dc"
-                                                                            className={`tablinks tablinks-362 has-child ${activeTab === 365 ? 'active' : ''}`}
-                                                                            onMouseEnter={() => handleMouseOverTab(365)} >
-                                                                            <img
-                                                                                alt="Mặt Dây Chuyền Kim Cương"
-                                                                                src="https://caohungdiamond.com/wp-content/uploads/2024/04/i-mat-day-chuyen-kim-cuong.png" />
-                                                                            <span className="cat-name">Dây Chuyền Kim
-                                                                                Cương</span>
-                                                                        </a>
-                                                                        <a href="http://localhost:3000/product/vt"
-                                                                            className={`tablinks tablinks-362 has-child ${activeTab === 366 ? 'active' : ''}`}
-                                                                            onMouseEnter={() => handleMouseOverTab(366)} >
-                                                                            <img
-                                                                                alt="Lắc tay, vòng tay kim cương"
-                                                                                src="https://caohungdiamond.com/wp-content/uploads/2023/11/icon-vong-tay-kim-cuong.png" />
-                                                                            <span className="cat-name">Lắc tay, vòng tay kim
-                                                                                cương</span>
-                                                                        </a>
-           
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col large-9">
-                                                                <div className="col-inner">
-                                                                    <div id="363"
-                                                                        className={`menu-tabcontent menu-tabcontent-362 ${activeTab === 363 ? 'active' : ''}`}>
-                                                                        <div className="row row-small">
-                                                                            <div className="col large-4">
-                                                                                <div className="col-inner">
-                                                                                    
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col large-8">
-                                                                                <div className="col-inner">
-                                                                                    <div className="mega-banner">
-                                                                                        <img
-                                                                                            alt="Nhẫn Kim Cương Tự Nhiên GIA Đẹp Giá Rẻ Cao Cấp"
-                                                                                            width="100%"
-                                                                                            src={SmallBanner} />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div id="370" className={`menu-tabcontent menu-tabcontent-362 ${activeTab === 364 ? 'active' : ''}`}>
-                                                                        <div className="row row-small">
-                                                                            <div className="col large-4">
-                                                                                <div className="col-inner">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col large-8">
-                                                                                <div className="col-inner">
-                                                                                    <div className="mega-banner">
-                                                                                        <img
-                                                                                            alt="Bông tai kim cương"
-                                                                                            width="100%"
-                                                                                            src={SmallBanner} />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div id="384" className={`menu-tabcontent menu-tabcontent-362 ${activeTab === 365 ? 'active' : ''}`}>
-                                                                        <div className="row row-small">
-                                                                            <div className="col large-4">
-                                                                                <div className="col-inner">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col large-8">
-                                                                                <div className="col-inner">
-                                                                                    <div className="mega-banner">
-                                                                                        <img
-                                                                                            alt="Mặt Dây Chuyền Kim Cương"
-                                                                                            width="100%"
-                                                                                            src={SmallBanner} />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div id="438" className={`menu-tabcontent menu-tabcontent-362 ${activeTab === 366 ? 'active' : ''}`}>
-                                                                        <div className="row row-small">
-                                                                            <div className="col large-4">
-                                                                                <div className="col-inner">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col large-8">
-                                                                                <div className="col-inner">
-                                                                                    <div className="mega-banner">
-                                                                                        <img
-                                                                                            alt="Banner Lắc tay, vòng tay kim cương"
-                                                                                            width="100%"
-                                                                                            src={SmallBanner} />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div id="369" className={`menu-tabcontent menu-tabcontent-362 ${activeTab === 367 ? 'active' : ''}`}>
-                                                                        <div className="row row-small">
-                                                                            <div className="col large-4">
-                                                                                <div className="col-inner">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col large-8">
-                                                                                <div className="col-inner">
-                                                                                    <div className="mega-banner">
-                                                                                        <img
-                                                                                            alt="Vỏ mặt dây chuyền kim cương Cao Hùng"
-                                                                                            width="100%"
-                                                                                            src="https://caohungdiamond.com/wp-content/uploads/2022/08/vo-mat-day-chuyen-kim-cuong-cao-hung.jpg" />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div id="365" className={`menu-tabcontent menu-tabcontent-362 ${activeTab === 368 ? 'active' : ''}`}>
-                                                                        <div className="row row-small">
-                                                                            <div className="col large-4">
-                                                                                <div className="col-inner">
-                                                                                   
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col large-8">
-                                                                                <div className="col-inner">
-                                                                                    <div className="mega-banner">
-                                                                                        <img
-                                                                                            alt="Vỏ nhân kim cương" width="100%"
-                                                                                            src="https://caohungdiamond.com/wp-content/uploads/2022/07/vo-nhan-kim-cuong.jpg" />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </li> */}
                                 <li id="menu-item-1"
                                     onClick={() => handleSetActiveToLocalstorage("menu-item-1")}
                                     className={`menu-item menu-item-type-post_type menu-item-object-page menu-item-4 menu-item-design-default  ${activeItem === "menu-item-1" ? 'active' : ''}`}>
@@ -432,24 +251,6 @@ const Header = () => {
                                         src="https://caohungdiamond.com/wp-content/uploads/2024/04/Vien-Kim-Cuong-icon.png"
                                         data-ll-status="loaded" />Bảng giá kim cương</a>
                                 </li>
-                                {/* <li id="menu-item-28272"
-                                    className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-28272 menu-item-design-default">
-                                    <a href="/blog" className="nav-top-link">Kiến thức trang sức</a>
-                                </li>
-                                <li id="menu-item-28273"
-                                    className="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-28273 menu-item-design-default">
-                                    <a href="" className="nav-top-link">Kiến
-                                        thức kim cương</a></li> */}
-                                <li id="menu-item-6347"
-                                    onClick={() => handleSetActiveToLocalstorage("menu-item-6347")}
-                                    className={`menu-item menu-item-type-post_type menu-item-object-page menu-item-6347 menu-item-design-default  ${activeItem === "menu-item-6347" ? 'active' : ''}`}>
-                                    <a href="/Introduction" className="nav-top-link">Giới thiệu</a></li>
-                                {/* <li id="menu-item-6409"
-                                    className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default">
-                                    <a href="" className="nav-top-link">Liên hệ</a></li> */}
-
-
-
                                 {role && role === "Admin" && (
                                     <li id="menu-item-6409"
                                         className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default">
@@ -480,25 +281,20 @@ const Header = () => {
                                 {isLoggedIn && (
                                     <>
                                         <li id="menu-item-6409" onClick={() => handleLogout()}
-                                            className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default">
+                                            className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default right-nav-items" style={{ marginLeft: '100px' }}>
                                             <a href="" className="nav-top-link">Logout</a></li>
                                     </>
                                 )}
                                 {!isLoggedIn && (
                                     <>
                                         <li id="menu-item-6409"
-                                            className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default">
+                                            className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default right-nav-items" style={{ marginLeft: '100px' }}>
                                             <a href="/sign-in" className="nav-top-link">Đăng nhập</a></li>
                                         <li id="menu-item-6409"
-                                            className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default">
+                                            className="menu-item menu-item-type-post_type menu-item-object-page menu-item-6409 menu-item-design-default right-nav-items">
                                             <a href="/sign-up" className="nav-top-link">Đăng ký</a></li>
                                     </>
                                 )}
-
-
-
-
-
                             </ul>
                         </div>
 
