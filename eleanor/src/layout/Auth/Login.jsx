@@ -62,6 +62,7 @@ const Login = () => {
             openNotificationWithIcon('error', 'Vui lòng nhập đầy đủ thông tin');
             return;
         }
+
         const { username, password } = data;
         try {
             const res = await axios.post("/customer/login", { username, password }).then((res) => {
@@ -71,7 +72,8 @@ const Login = () => {
                 else {
                     const dataDecode = jwtDecode(res.data.token);
                     localStorage.setItem("token", res.data.token);
-                    localStorage.setItem("role", "Customer");
+                    localStorage.setItem("role", "Customer"); 
+                    
                     context.setAuth({
                         id: dataDecode.CustomerID,
                         fullname: dataDecode.CusName,
