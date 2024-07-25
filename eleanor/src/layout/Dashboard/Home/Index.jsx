@@ -104,7 +104,7 @@ export default function DashboardDefault() {
                     break;
                 case 'December':
                     monthString = 'month 12';
-                    break;
+                    break;                   
                 default:
                     break;
             }

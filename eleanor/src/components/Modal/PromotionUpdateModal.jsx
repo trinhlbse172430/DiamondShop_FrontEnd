@@ -32,6 +32,11 @@ const PromotionUpdateModal = ({ visible, onCreate, onCancel, data }) => {
             openNotificationWithIcon('error', 'Start date must be before end date');
             return;
         }
+        if (PromPercent > 50) {
+            openNotificationWithIcon('error', 'Promotion must be smaller than 50%');
+            return;
+        }
+        
         axios.put(`/promotion/${data.PromotionID}`, {
             PromotionName: promName,
             PromStartDate: startDate.format('YYYY-MM-DD'),

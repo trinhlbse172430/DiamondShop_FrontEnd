@@ -34,6 +34,11 @@ const PromotionCreateModal = ({ visible, onCreate, onCancel }) => {
             openNotificationWithIcon('error', 'End date must be greater than start date');
             return;
         }
+        //check percent
+        if (PromPercent >= 49) {
+            openNotificationWithIcon('error', 'Promotion percent must be smaller than 50%');
+            return;
+        }
         const promotionID = "PRO" + Date.now().toString(36).slice(-4);
         try {
             const response = await axios.post(`/promotion`, {
